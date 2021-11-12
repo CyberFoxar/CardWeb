@@ -1,7 +1,15 @@
 {
+  "name": "cardweb",
+  "description": "A website to serve card, loosely based on Devdocs.io's concept of SSO and offline-capable app",
+  "version": "0.0.1",
+  "author": {
+    "name": "CyberFoxar"
+  },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.0",
     "autoprefixer": "^10.3.7",
+    "concurrently": "^6.3.0",
+    "nodemon": "^2.0.15",
     "parcel": "^2.0.0",
     "postcss": "^8.3.11",
     "tailwindcss": "^2.2.17"

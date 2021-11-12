@@ -1,6 +1,6 @@
 import * as marked from "marked";
 import fm from "../../node_modules/front-matter/index";
-import { IndexBuilder } from "./build-index";
+import { IndexBuilder } from "./IndexBuilder";
 
 var container = document.getElementById("container");
 
@@ -13,8 +13,6 @@ async function main() {
     let index = new IndexBuilder();
 }
 
-main();
-
 export async function loadMarkdown(url: string) {
     generatedMenu!.innerHTML = "";
     const response = await fetch(url);
@@ -23,6 +21,8 @@ export async function loadMarkdown(url: string) {
     const markedHTML = marked(fmDoc.body);
     container!.innerHTML = markedHTML;
 }
+
+
 
 
 // Override function
@@ -73,5 +73,7 @@ const tokenizer: marked.TokenizerObject = {
     }
 };
 
+
+main();
 marked.use({ tokenizer });
 

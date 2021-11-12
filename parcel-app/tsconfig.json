@@ -3,6 +3,7 @@
     "compilerOptions": {
       "module": "esnext",
       "target": "es2021",
-      "strict": true  
+      "strict": true,
+      "moduleResolution": "node"
     }
   }
