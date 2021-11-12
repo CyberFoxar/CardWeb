@@ -24,5 +24,10 @@
     "main": {
       "publicUrl": "/"
     }
+  },
+  "scripts": {
+    "start-parcel": "yarn parcel .\\src\\index.html",
+    "start-mdprocess": "nodemon ./data-md/build-data.js --watch ./data-md",
+    "start": "concurrently \"npm:start-parcel\" \"start-mdprocess\" "
   }
 }

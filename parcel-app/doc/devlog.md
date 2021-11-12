@@ -21,6 +21,12 @@ Todo creation
 # 2021-11-08
 Looking into how to bundle my files with parcel somewhat easily.
 
+# 2021-11-12
++ Added gitea
++ Took a look at how parcel process things. It's annoying so I'm not bothering with it
++ Added a try with nodemon/concurently
++ bunch of busywork
+
 
 # Todo:
 See [Reseach](useful-things-research.md).
