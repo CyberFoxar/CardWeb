@@ -1,5 +1,8 @@
 ---
-tags: 8-americain, standard-deck, jokers, n-players
+tags: 8-americain, standard-deck, jokers, n-players, easy
+players: 2-N
+complexity: 1
+length: 10-30
 ---
 
 8 Américain (Règles)
