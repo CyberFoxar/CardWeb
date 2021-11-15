@@ -1,5 +1,8 @@
 ---
 tags: standard-deck, 3-6-players, easy
+playercount: 3-6
+complexity: 1
+title: ascenseur
 ---
 Ascenseur
 =========

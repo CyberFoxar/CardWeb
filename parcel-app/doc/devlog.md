@@ -27,6 +27,9 @@ Looking into how to bundle my files with parcel somewhat easily.
 + Added a try with nodemon/concurently
 + bunch of busywork
 
+# 2021-11-15
+work on parser / data-build. I'm quite satisfied with the datamodel. The index-building could use some work, but this is enough for now.
+
 
 # Todo:
 See [Reseach](useful-things-research.md).
