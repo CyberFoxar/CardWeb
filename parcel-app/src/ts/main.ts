@@ -1,25 +1,45 @@
 import * as marked from "marked";
 import fm from "../../node_modules/front-matter/index";
 import { IndexBuilder } from "./IndexBuilder";
+import { Index } from "./models/Index.model";
 
 var container = document.getElementById("container");
 
 var generatedMenu: HTMLElement | null = document.getElementById("generatedMenu");
 
 async function main() {
-    loadMarkdown("http://localhost:8080/8-americain.md");
-    document.getElementById("8-americain")!.onclick = () => loadMarkdown("http://localhost:8080/8-americain.md");
-    document.getElementById("ascenceur")!.onclick = () => loadMarkdown("http://localhost:8080/ascenceur.md");
-    let index = new IndexBuilder();
+    // loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
+    // document.getElementById("8-americain")!.onclick = () => loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
+    // document.getElementById("ascenceur")!.onclick = () => loadMarkdownFromUrl("http://localhost:8080/ascenceur.md");
+    loadIndex("/indexes/fr-index.json");
 }
 
-export async function loadMarkdown(url: string) {
-    generatedMenu!.innerHTML = "";
+export async function loadMarkdownFromUrl(url: string) {
     const response = await fetch(url);
     const text = await response.text();
+    loadMarkdown(text);
+}
+
+export function loadMarkdown(text: string){
+    generatedMenu!.innerHTML = "";
     const fmDoc = fm(text);
     const markedHTML = marked(fmDoc.body);
     container!.innerHTML = markedHTML;
+}
+
+export async function loadIndex(url: string){
+    const response = await fetch(url);
+    const text = await response.text();
+    const index = JSON.parse(text) as Index;
+
+    const entryMenu = document.getElementById("indexEntries")!;
+
+    index.entries.forEach(entry => {
+        const entryElement = document.createElement("button");
+        entryElement.innerHTML = entry.id;
+        entryElement.addEventListener("click", () => loadMarkdown(index.entries.find(e => e.id === entry.id)!.content));
+        entryMenu.appendChild(entryElement);
+    })
 }
 
 
