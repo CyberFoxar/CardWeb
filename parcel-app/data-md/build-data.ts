@@ -50,15 +50,17 @@ function main() {
     }
   });
 
-  console.log(index);
+  // console.log(index);
+  console.log("Index built ! Writing to disk..."); 
 
   const filename = index.lang + '-index.json'
   const dirpath = path.resolve(dir, filename); 
   const distpath = path.resolve(__dirname, distDir, filename);
-  fs.writeFileSync(dirpath, JSON.stringify(index));
+  fs.writeFileSync(dirpath, JSON.stringify(index, null, 2));
   fs.copyFileSync(dirpath, distpath);
 
   // console.log(getFiles(dir));
+  console.log(`Done writing at ${distpath}`);
 }
 
 /**

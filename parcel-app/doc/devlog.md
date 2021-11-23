@@ -28,15 +28,14 @@ Looking into how to bundle my files with parcel somewhat easily.
 + bunch of busywork
 
 # 2021-11-15
-work on parser / data-build. I'm quite satisfied with the datamodel. The index-building could use some work, but this is enough for now.
+work on parser / data-build. I'm quite satisfied with the datamodel. The index-building could use some work, but this is enough for now. Also integrated the indexes with parcel webpage, it's basic for now, but I'll upgrade it later.
 
 
 # Todo:
 See [Reseach](useful-things-research.md).
 
-- Definir un format de données
-- Preprocess pour l'API (packagé avec l'app parcel ?)
-    Let's see how this might work in Parcel
+- Definir un format de données ✅
+- Preprocess pour l'API (packagé avec l'app parcel - mais preprocess) ✅
 - PostProcess dans la webapp (indexedDB / LocalStorage)
 - UI work (MD styles, app styles)
     - MD styles

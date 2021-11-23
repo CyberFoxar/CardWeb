@@ -1,11 +1,12 @@
 import * as marked from "marked";
 import fm from "../../node_modules/front-matter/index";
-import { IndexBuilder } from "./IndexBuilder";
+import { MarkdownToc } from "./MarkdownToc";
 import { Index } from "./models/Index.model";
 
 var container = document.getElementById("container");
 
 var generatedMenu: HTMLElement | null = document.getElementById("generatedMenu");
+var TOC = new MarkdownToc();
 
 async function main() {
     // loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
@@ -21,10 +22,12 @@ export async function loadMarkdownFromUrl(url: string) {
 }
 
 export function loadMarkdown(text: string){
+    TOC = new MarkdownToc();
     generatedMenu!.innerHTML = "";
     const fmDoc = fm(text);
     const markedHTML = marked(fmDoc.body);
     container!.innerHTML = markedHTML;
+    // generatedMenu!.innerHTML = TOC.render();
 }
 
 export async function loadIndex(url: string){
@@ -59,6 +62,11 @@ const tokenizer: marked.TokenizerObject = {
             let [, depth, text] = cap;
             const slugText = new marked.Slugger().slug(text);
 
+            depth = depth.length;
+
+            console.log("Adding TOC item with text ", slugText , "and level ", depth);
+            TOC.addTocItem(slugText, text, depth);
+
             // let tokens: marked.Token[] = [];
             // this.lexer.inline(text, tokens);
             // console.log(src, cap, tokens);
@@ -87,13 +95,14 @@ const tokenizer: marked.TokenizerObject = {
             const text = cap[1];
             const slugText = new marked.Slugger().slug(text);
     
+            console.log("Adding TOC item with text ", slugText , "and level ", depth);
+            TOC.addTocItem(slugText, text, depth);
+
             generatedMenu!.innerHTML += `<li><a href="#${slugText}">${text}</a></li>`;
         }
         return false;
     }
 };
 
-
-main();
 marked.use({ tokenizer });
-
+main();

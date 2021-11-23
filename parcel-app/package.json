@@ -31,6 +31,6 @@
     "start-parcel": "yarn parcel .\\src\\index.html",
     "start-mdprocess": "nodemon ./data-md/build-data.js --watch ./data-md",
     "start-tscmd": "tsc-watch ./data-md/build-data.ts --outDir ./data-md/ --onSuccess \"node ./data-md/build-data.js\"",
-    "start": "concurrently \"npm:start-parcel\" \"start-mdprocess\" "
+    "start": "concurrently \"npm:start-parcel\" \"npm:start-tscmd\" -c magenta,cyan"
   }
 }

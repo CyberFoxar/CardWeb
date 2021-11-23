@@ -45,13 +45,15 @@ function main() {
             index.entries.push(entry);
         }
     });
-    console.log(index);
+    // console.log(index);
+    console.log("Index built ! Writing to disk...");
     var filename = index.lang + '-index.json';
     var dirpath = path.resolve(dir, filename);
     var distpath = path.resolve(__dirname, distDir, filename);
-    fs.writeFileSync(dirpath, JSON.stringify(index));
+    fs.writeFileSync(dirpath, JSON.stringify(index, null, 2));
     fs.copyFileSync(dirpath, distpath);
     // console.log(getFiles(dir));
+    console.log("Done writing at " + distpath);
 }
 /**
  * Parse a range of numbers, usually coming from a humain-readable string.
