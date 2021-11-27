@@ -9,8 +9,7 @@ export class MarkdownToc {
     private currentTocItem: TocItem;
     public toc: TocItem;
 
-    constructor(
-    ) {
+    constructor() {
         this.toc = new TocItem(
             '',
             'ToC root',
@@ -28,14 +27,14 @@ export class MarkdownToc {
         // We might be able to fix that by calling marked's lexer better.
 
         const itemToAdd = new TocItem(url, text, depth, null);
-        console.log("Adding: ", itemToAdd, `to TOC `, this.toc, " with current item: ", this.currentTocItem);
+        console.debug("Adding: ", itemToAdd, `to TOC `, this.toc, " with current item: ", this.currentTocItem);
 
         if (depth < this.currentTocItem.depth) {
             // Find a parent with the same depth as the item we are adding.
             // Then add ourselves as a sibling to that parent.
             let parent = this.currentTocItem;
             while (parent.depth > depth) {
-                console.log("Trying to find parent with depth: ", depth, " examining parent: ", parent);
+                console.debug("Trying to find parent with depth: ", depth, " examining parent: ", parent);
                 if (!parent.parent) {
                     throw new Error(`Parent of item ${parent.text} not found`);
                 }
@@ -60,9 +59,13 @@ export class MarkdownToc {
 
     }
 
-    renderToHtml(): string {
+    public toUl(): HTMLUListElement {
         // let menuItemHtml = `<li><a href="#${url}">${text}</a></li>`
-        return '';
+        let ul = <HTMLUListElement>document.createElement("ul");
+        this.toc.children.forEach(child => {
+            ul.appendChild(child.toHTMLElements());
+        });
+        return ul;
     }
 
 }
@@ -78,7 +81,7 @@ class TocItem {
 
     public addSibling(item: TocItem) {
         // Add a sibling
-        console.log("Adding sibling: ", item, " to me: ", this);
+        console.debug("Adding sibling: ", item, " to me: ", this);
         if (!this.parent) {
             throw new Error(`No parent for this item: ${this.text}`);
         }
@@ -88,8 +91,24 @@ class TocItem {
 
     public addChild(item: TocItem) {
         // Add a child
-        console.log("Adding child: ", item, " to me: ", this);
+        console.debug("Adding child: ", item, " to me: ", this);
         this.children.push(item);
         item.parent = this;
+    }
+
+    public toHTMLElements(): HTMLLIElement {
+        let li = <HTMLLIElement>document.createElement("li");
+        let link = <HTMLAnchorElement>document.createElement("a");
+        link.href = this.url;
+        link.text = this.text;
+        li.appendChild(link);
+        if (this.children.length > 0) {
+            let ul = <HTMLUListElement>document.createElement("ul");
+            this.children.forEach(child => {
+                ul.appendChild(child.toHTMLElements());
+            });
+            li.appendChild(ul);
+        }
+        return li;
     }
 }

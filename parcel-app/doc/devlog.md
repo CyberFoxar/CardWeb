@@ -30,6 +30,10 @@ Looking into how to bundle my files with parcel somewhat easily.
 # 2021-11-15
 work on parser / data-build. I'm quite satisfied with the datamodel. The index-building could use some work, but this is enough for now. Also integrated the indexes with parcel webpage, it's basic for now, but I'll upgrade it later.
 
+# 2021-11-27
+Finished TOC and TOC rendering (including handling identically-named headings).
+Began looking into indexed DB, though I might want to do some UI work.
+Current next items: UI & DB
 
 # Todo:
 See [Reseach](useful-things-research.md).
@@ -44,7 +48,7 @@ See [Reseach](useful-things-research.md).
     - Accordeons
 - ScrollSpy (unsure)
 - Search
-  - define
+  Will probably be an indexedDB search thingamajid of some sort. Not sure how I'll handle it yet.
 - JS card game plugin thing
   - define
   - md extension
