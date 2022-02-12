@@ -21,5 +21,12 @@ Current idea are:
     1. ~~include the whole folder in parcel and have a transformer transform it into our index thingy.~~ -- Not worth the hassle to do. Would require a separate package and other bits and bobs and would probably make me run into other problems (it seems, for example, that there's no persistence or way to pass options to it).
     2. run a small script in // of parcel that do just what I want: checkin for md files, processing them and then allowing this to be served by parcel (or anyone else, really).This script weould go in my script key in pckg.json. It would look something like running `Concurrently` to have both task and have my process task being run with `nodemon`.
 
+Another idea:
+Do not bundle anything / bundle as little as possible.
+Have all the .md available ~somewhere~ on the server as cleartext / not obsfucated
+Have a digest/meta of all files made
+Each time a file is requested, cache the contents (or don't if client does not wishes it).
+Have an option to cache everything from a given lang.
+
 ## Why bundling files in the dist ?
 Not having multiple app running is a plus for me, even if running with `file://` is not an option for a local distrib, running just the thing locally would be trivial if it's just a bunch of js/html/json. That would also (probably) allow me to serve it from virtually anything that lets me upload HTML/JS/CSS+Assets.

@@ -7,7 +7,7 @@ title: ascenseur
 Ascenseur
 =========
 
-> Le jeu se joue avec un jeu de 52 cartes et de 3 à 6 joueurs, dont on enlève : à 3, un 2 ; à 5, deux 2 ; à 6, tous les 2. Il se décompose en une série de manches, qui se jouent avec un nombre de cartes croissant, puis décroissant : au premier tour, on joue avec 1 carte ; au deuxième tour avec 2 cartes ; à l'avant-dernier avec 2 et au dernier avec 1. On joue dans le sens des aiguilles d'une montre.
+Le jeu se joue avec un jeu de 52 cartes et de 3 à 6 joueurs, dont on enlève : à 3, un 2 ; à 5, deux 2 ; à 6, tous les 2. Il se décompose en une série de manches, qui se jouent avec un nombre de cartes croissant, puis décroissant : au premier tour, on joue avec 1 carte ; au deuxième tour avec 2 cartes ; à l'avant-dernier avec 2 et au dernier avec 1. On joue dans le sens des aiguilles d'une montre.
 
 Distribution et jeu de la carte
 -------------------------------

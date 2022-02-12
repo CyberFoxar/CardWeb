@@ -9,7 +9,7 @@ title: 8-americain
 8 Américain (Règles)
 ====================
 
-> Le Huit Américain se joue avec un jeu de 54 cartes (52 cartes + 2 jokers).
+Le Huit Américain se joue avec un jeu de 54 cartes (52 cartes + 2 jokers). C'est un genre d'ancêtre du très populaire Uno! .
 
 But du jeu
 ----------

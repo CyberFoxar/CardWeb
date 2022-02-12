@@ -35,6 +35,11 @@ Finished TOC and TOC rendering (including handling identically-named headings).
 Began looking into indexed DB, though I might want to do some UI work.
 Current next items: UI & DB
 
+# 2022-02-12
+Todo pour ajd:
+Styles pour mon MD / site.
+
+
 # Todo:
 See [Reseach](useful-things-research.md).
 

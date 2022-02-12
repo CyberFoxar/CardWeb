@@ -1,15 +1,19 @@
 module.exports = {
   mode: 'jit',
   corePlugins: {
-      preflight: true,
+    preflight: true,
   },
-  purge: ["./src/index.html"],
-  darkMode: false, // or 'media' or 'class'
+  darkMode:  true, // or 'media' or 'class'
+  content: [
+    "./src/**/*.{html,js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {},
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
