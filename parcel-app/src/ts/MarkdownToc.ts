@@ -27,14 +27,14 @@ export class MarkdownToc {
         // We might be able to fix that by calling marked's lexer better.
 
         const itemToAdd = new TocItem(url, text, depth, null);
-        console.debug("Adding: ", itemToAdd, `to TOC `, this.toc, " with current item: ", this.currentTocItem);
+        // console.debug("Adding: ", itemToAdd, `to TOC `, this.toc, " with current item: ", this.currentTocItem);
 
         if (depth < this.currentTocItem.depth) {
             // Find a parent with the same depth as the item we are adding.
             // Then add ourselves as a sibling to that parent.
             let parent = this.currentTocItem;
             while (parent.depth > depth) {
-                console.debug("Trying to find parent with depth: ", depth, " examining parent: ", parent);
+                // console.debug("Trying to find parent with depth: ", depth, " examining parent: ", parent);
                 if (!parent.parent) {
                     throw new Error(`Parent of item ${parent.text} not found`);
                 }

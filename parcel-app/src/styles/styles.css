@@ -1,19 +1,27 @@
 @tailwind base;
-
-@layer base {
-    h1 {
-      @apply text-2xl;
-    }
-    h2 {
-      @apply text-xl;
-    }
-    h3 {
-      @apply text-lg;
-    }
-    a {
-      @apply text-blue-600 underline;
-    }
-  }
-
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+  h3 {
+    @apply text-lg;
+  }
+  a {
+    @apply text-blue-600 underline;
+  }
+}
+
+@layer components { 
+  .generated-menu a {
+      @apply text-pink-600 hover:text-pink-400 no-underline;
+  }
+  .generated-menu li {
+      @apply ml-2 mt-1;
+  }
+}

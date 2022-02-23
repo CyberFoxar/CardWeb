@@ -3,7 +3,7 @@ module.exports = {
   corePlugins: {
     preflight: true,
   },
-  darkMode:  true, // or 'media' or 'class'
+  darkMode: 'media', // or 'media' or 'class'
   content: [
     "./src/**/*.{html,js,ts,jsx,tsx}",
   ],
