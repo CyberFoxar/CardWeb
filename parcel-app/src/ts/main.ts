@@ -90,7 +90,12 @@ export async function loadIndex(url: string){
     index.entries.forEach(entry => {
         const entryElement = document.createElement("button");
         entryElement.innerHTML = entry.id;
-        entryElement.addEventListener("click", () => loadMarkdown(index.entries.find(e => e.id === entry.id)!.content));
+        // Load content directly
+        // entryElement.addEventListener("click", () => loadMarkdown(index.entries.find(e => e.id === entry.id)!.content));
+
+        // Load content from url
+        entryElement.addEventListener("click", () => loadMarkdownFromUrl(markdownDocumentsUrl + entry.location));
+
         entryMenu.appendChild(entryElement);
     })
 }

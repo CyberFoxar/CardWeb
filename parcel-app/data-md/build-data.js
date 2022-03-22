@@ -35,13 +35,15 @@ function main() {
     //TODO: automatically build indexes from end of directory name
     fileNames.forEach(file => {
         const ext = path.extname(file);
+        const lastEdit = fs.statSync(file).mtime;
+        const fullFilename = path.basename(file);
         if (ext === '.md') {
             const data = fs.readFileSync(file, { encoding: 'utf8' });
             const lang = path.dirname(file).split('/').pop(); // grabs de parent folder name of the file (use it to select/build index) //TODO
             const parsed = yamlFront.loadFront(data);
             const playercount = parseRange(parsed.playercount);
             const playtime = parseRange(parsed.playtime);
-            const entry = new IndexEntry(parsed.tags, parsed.title, playercount, parsed.complexity, playtime, parsed.__content);
+            const entry = new IndexEntry(parsed.tags, parsed.title, playercount, parsed.complexity, playtime, lastEdit, encodeURI(fullFilename), parsed.__content);
             index.entries.push(entry);
         }
     });
@@ -95,12 +97,14 @@ function parseRange(range) {
     };
 }
 class IndexEntry {
-    constructor(tags = [], id, playercount, complexity, length, content = '') {
+    constructor(tags = [], id, playercount, complexity, length, lastupdated, location, content = '') {
         this.tags = tags;
         this.id = id;
         this.playercount = playercount;
         this.complexity = complexity;
         this.length = length;
+        this.lastupdated = lastupdated;
+        this.location = location;
         this.content = content;
         if (!id || id.length === 0) {
             throw new Error(`IndexEntry with tags ${tags}: id is empty`);

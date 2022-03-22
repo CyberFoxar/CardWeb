@@ -41,6 +41,7 @@ function main() {
   fileNames.forEach(file => {
     const ext = path.extname(file);
     const lastEdit = fs.statSync(file).mtime;
+    const fullFilename = path.basename(file);
     if (ext === '.md') {
       const data = fs.readFileSync(file, { encoding: 'utf8' });
       const lang = path.dirname(file).split('/').pop(); // grabs de parent folder name of the file (use it to select/build index) //TODO
@@ -53,8 +54,8 @@ function main() {
         playercount, 
         parsed.complexity, 
         playtime, 
-        parsed.lastupdated,
-        parsed.location,
+        lastEdit,
+        encodeURI(fullFilename),
         parsed.__content);
       index.entries.push(entry);
     }
