@@ -11,6 +11,9 @@ var container = document.getElementById("container");
 var generatedMenu: HTMLElement | null = document.getElementById("generated-menu");
 var TOC = new MarkdownToc();
 
+// TODO: Change
+const markdownDocumentsUrl = "/fr/";
+
 // Necessary to have our own slugger, because we don't want to use default one.
 // A bit hacky, but basically we need to have our own slugger to not interfere with marked's.
 // And we still need to have a slugger since it's him who keep track (and makes) unique URLs.

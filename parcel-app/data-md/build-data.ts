@@ -39,22 +39,32 @@ function main() {
 
   fileNames.forEach(file => {
     const ext = path.extname(file);
+    const lastEdit = fs.statSync(file).mtime;
     if (ext === '.md') {
       const data = fs.readFileSync(file, { encoding: 'utf8' });
       const lang = path.dirname(file).split('/').pop(); // grabs de parent folder name of the file (use it to select/build index) //TODO
       const parsed = fm(data);
       const playercount = parseRange(parsed.attributes.playercount);
       const playtime = parseRange(parsed.attributes.playtime);
-      const entry = new IndexEntry(parsed.attributes.tags, parsed.attributes.title, playercount, parsed.attributes.complexity, playtime, parsed.body);
+
+      const entry = new IndexEntry(
+        parsed.attributes.tags,
+        parsed.attributes.title,
+        playercount,
+        parsed.attributes.complexity,
+        playtime,
+        lastEdit,
+        null,
+        parsed.body);
       index.entries.push(entry);
     }
   });
 
   // console.log(index);
-  console.log("Index built ! Writing to disk..."); 
+  console.log("Index built ! Writing to disk...");
 
-  const filename = index.lang + '-index.json'
-  const dirpath = path.resolve(dir, filename); 
+  const filename = index.lang + '-index.json';
+  const dirpath = path.resolve(dir, filename);
   const distpath = path.resolve(__dirname, distDir, filename);
   fs.writeFileSync(dirpath, JSON.stringify(index, null, 2));
   fs.copyFileSync(dirpath, distpath);
@@ -115,11 +125,13 @@ class IndexEntry {
       min: number,
       max: number,
     },
+    public lastupdated?: Date,
+    public location?: string,
     public content = '') {
-      if(!id || id.length === 0) {
-        throw new Error(`IndexEntry with tags ${tags}: id is empty`);
-      }
-     }
+    if (!id || id.length === 0) {
+      throw new Error(`IndexEntry with tags ${tags}: id is empty`);
+    }
+  }
 }
 
 class Index {

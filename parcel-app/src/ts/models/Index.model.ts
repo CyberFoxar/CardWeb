@@ -17,6 +17,8 @@ export class IndexEntry {
             min: number,
             max: number,
         },
+        public lastupdated?: Date,
+        public location?: string,
         public content = '') {
         if (!id || id.length === 0) {
             throw new Error(`IndexEntry with tags ${tags}: id is empty`);

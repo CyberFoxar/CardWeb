@@ -15,13 +15,13 @@ However, I'va also seen plugins that would move things in the dist directory aut
 
 Because putting stuff in the `dist` directory allows them to be served by the parcel server and will bundle them when building prod (I think). This seems a bit annoying to do automatically, but the alternatives are as annoying.
 
-Current idea are:
+Previous idea are:
 1. Separate node server serves pre-processed files/indexes and our app go fetch them as need
 2. A script of some sort pre-process the files and bundle them with the parcel app as static thingies.
     1. ~~include the whole folder in parcel and have a transformer transform it into our index thingy.~~ -- Not worth the hassle to do. Would require a separate package and other bits and bobs and would probably make me run into other problems (it seems, for example, that there's no persistence or way to pass options to it).
     2. run a small script in // of parcel that do just what I want: checkin for md files, processing them and then allowing this to be served by parcel (or anyone else, really).This script weould go in my script key in pckg.json. It would look something like running `Concurrently` to have both task and have my process task being run with `nodemon`.
 
-Another idea:
+Current ( 2022-03-22 ) idea:
 Do not bundle anything / bundle as little as possible.
 Have all the .md available ~somewhere~ on the server as cleartext / not obsfucated
 Have a digest/meta of all files made

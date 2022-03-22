@@ -59,3 +59,6 @@ See [Reseach](useful-things-research.md).
   - md extension
   - visuals
   - mock-up
+- Prepare CI/CD
+  - Build working dockerfile
+  - Look at how jenkins works for that and plan for it and try.
