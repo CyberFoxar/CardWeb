@@ -1,8 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as yamlFront from "yaml-front-matter";
 
 // @ts-ignore -- importing using typescript does not work for some reason
-const fm = require('front-matter');
+// const fm = require('front-matter');
 
 const dir = './data-md/';
 const distDir = '../dist/indexes/';
@@ -43,19 +44,18 @@ function main() {
     if (ext === '.md') {
       const data = fs.readFileSync(file, { encoding: 'utf8' });
       const lang = path.dirname(file).split('/').pop(); // grabs de parent folder name of the file (use it to select/build index) //TODO
-      const parsed = fm(data);
-      const playercount = parseRange(parsed.attributes.playercount);
-      const playtime = parseRange(parsed.attributes.playtime);
-
+      const parsed = yamlFront.loadFront(data);
+      const playercount = parseRange(parsed.playercount);
+      const playtime = parseRange(parsed.playtime);
       const entry = new IndexEntry(
-        parsed.attributes.tags,
-        parsed.attributes.title,
-        playercount,
-        parsed.attributes.complexity,
-        playtime,
-        lastEdit,
-        null,
-        parsed.body);
+        parsed.tags, 
+        parsed.title, 
+        playercount, 
+        parsed.complexity, 
+        playtime, 
+        parsed.lastupdated,
+        parsed.location,
+        parsed.__content);
       index.entries.push(entry);
     }
   });
@@ -78,11 +78,12 @@ function main() {
  * @param range undefined, empty, or of formats: '1-3', '5+', '5-', '5'
  * @returns an object with the range, might be null if nothing was parsed
  */
-function parseRange(range: string): { min: number, max: number; } {
-  if (!range || range.length === 0) {
+function parseRange(range: string|number): { min: number, max: number; } {
+  if (!range || range.toString().length === 0) {
     // range does not exist or is empty string
     return { min: null, max: null };
   }
+  range = range.toString();
 
   if (range.endsWith('+')) {
     // range is of format: 5+
