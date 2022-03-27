@@ -39,6 +39,19 @@ Current next items: UI & DB
 Todo pour ajd:
 Styles pour mon MD / site.
 
+# 2022-03-22
+Merge stuff, ajout des regles en plus
+Changement dans le fetch du MD: l'indexe ne doit plus donner qu'un endroit ou récupérer le fichier.
+Prochains dev: Intégrer une version sommaire d'indexedDB
+
+# 2022-03-27
+Pour build & deploy:
+- checkout folder
+- compile indexes & build app
+- cp data-md/fr/* dist/main/fr/
+- cp data-md/fr-index.json dist/main/indexes/fr-index.json
+
+
 
 # Todo:
 See [Reseach](useful-things-research.md).

@@ -100,6 +100,10 @@ export async function loadIndex(url: string){
     })
 }
 
+export function saveToIndexedDb(url: string, text: string) {
+    
+}
+
 
 // Override function
 // WARN: Code assumes that my lexer and marked's are on the same page, but that might not be the case.

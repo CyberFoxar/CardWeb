@@ -2,6 +2,9 @@
     "folders": [
         {
             "path": "parcel-app"
+        },
+        {
+            "path": ".woodpecker"
         }
     ]
 }

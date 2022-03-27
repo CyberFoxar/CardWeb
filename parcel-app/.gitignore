@@ -62,5 +62,6 @@ typings/
 
 # Parcel related files
 dist/
+dist-prod/
 .cache/
 .parcel-cache/

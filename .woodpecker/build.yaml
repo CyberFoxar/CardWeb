@@ -1,0 +1,52 @@
+pipeline:
+  build:
+    image: node:16
+    commands:
+      - cd parcel-app/
+      - npm install
+      - npm run build
+      - npm run build-indexes
+      - npm run copy-files
+  deploy:
+    image: alpine:3.15
+    environment:
+      - SSH_USER=woodpecker
+      - SSH_HOST=192.168.1.41
+      - SSH_PORT=1422
+    commands:
+      - apk add --no-cache tar openssh-client ca-certificates bash
+#      - cd build && tar czvf ../build-${CI_BUILD_NUMBER}.tar.gz .-
+      - mkdir -p ~/.ssh
+      - chmod 700 ~/.ssh
+      - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+      - echo "$SSH_KEY" > ~/.ssh/id_rsa
+      - ls -lah  ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - scp -s -P $SSH_PORT -r parcel-app/dist-prod/. $SSH_USER@$SSH_HOST:/sites/cardweb/
+#      - ssh ${SSH_USER}:$SSH_HOST 'chmod 700 ~/app/app.sh'
+#      - ssh ${SSH_USER}:$SSH_HOST 'cd ~/app && ./app.sh --file docker-compose-staging.yml up'
+#      - ssh ${SSH_USER}:$SSH_HOST 'cd ~/app && ./app.sh --file docker-compose-staging.yml update
+    secrets:
+      - ssh_key
+#  upload:
+#    image: vividboarder/drone-webdav
+#    settings:
+#      file: build-${CI_BUILD_NUMBER}.tar.gz
+#      destination: https://cloud.xorus.fr/remote.php/dav/files/gitea-xorus/build/notraidplan/
+#    secrets: [webdav_username, webdav_password]
+#  deploy:
+#    image: appleboy/drone-scp
+#    settings:
+#      host: 192.168.1.41
+##      172.17.0.1
+#      port: 1422
+##      source: build-${CI_BUILD_NUMBER}.tar.gz
+#      source: README.md
+#      target: /sites/plan/
+#      user: woodpecker
+#      timeout: 5s
+#      overwrite: true
+#      key:
+#        from_secret: ssh_key
+#    secrets:
+#      - ssh_key
