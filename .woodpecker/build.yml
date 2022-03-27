@@ -1,12 +1,12 @@
 pipeline:
   build:
-    image: node:16
+    image: node:17
     commands:
       - cd parcel-app/
-      - npm install
-      - npm run build
-      - npm run build-indexes
-      - npm run copy-files
+      - yarn
+      - yarn run build
+      - yarn run build-indexes
+      - yarn run copy-files
   deploy:
     image: alpine:3.15
     environment:
@@ -20,9 +20,10 @@ pipeline:
       - chmod 700 ~/.ssh
       - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
       - echo "$SSH_KEY" > ~/.ssh/id_rsa
-      - ls -lah  ~/.ssh/id_rsa
+      - ls -lah parcel-app
+      - ls -lah parcel-app/dist-prod
       - chmod 600 ~/.ssh/id_rsa
-      - scp -s -P $SSH_PORT -r parcel-app/dist-prod/. $SSH_USER@$SSH_HOST:/sites/cardweb/
+      - scp -P $SSH_PORT -r parcel-app/dist-prod/* $SSH_USER@$SSH_HOST:/sites/cardweb/
 #      - ssh ${SSH_USER}:$SSH_HOST 'chmod 700 ~/app/app.sh'
 #      - ssh ${SSH_USER}:$SSH_HOST 'cd ~/app && ./app.sh --file docker-compose-staging.yml up'
 #      - ssh ${SSH_USER}:$SSH_HOST 'cd ~/app && ./app.sh --file docker-compose-staging.yml update

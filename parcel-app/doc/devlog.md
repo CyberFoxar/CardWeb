@@ -51,6 +51,8 @@ Pour build & deploy:
 - cp data-md/fr/* dist/main/fr/
 - cp data-md/fr-index.json dist/main/indexes/fr-index.json
 
+See [this file](../../.woodpecker/build.yml) for info.
+Also fixed Parcel not bundling stuff: 
 
 
 # Todo:
@@ -61,9 +63,10 @@ See [Reseach](useful-things-research.md).
 - PostProcess dans la webapp (indexedDB / LocalStorage)
 - UI work (MD styles, app styles)
     - MD styles
+      - Add permalink button next to headings
     - App styles
-    - DarkTheme
-    - Accordeons
+    - DarkTheme & ClearTheme
+    - Accordeons (a la m.wikipedia ? Open by default)
 - ScrollSpy (unsure)
 - Search
   Will probably be an indexedDB search thingamajid of some sort. Not sure how I'll handle it yet.

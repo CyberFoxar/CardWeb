@@ -68,10 +68,12 @@ function main() {
   const dirpath = path.resolve(dir, filename);
   const distpath = path.resolve(__dirname, distDir, filename);
   fs.writeFileSync(dirpath, JSON.stringify(index, null, 2));
-  fs.copyFileSync(dirpath, distpath);
+
+  // Copy file to dist
+  // fs.copyFileSync(dirpath, distpath);
 
   // console.log(getFiles(dir));
-  console.log(`Done writing at ${distpath}`);
+  // console.log(`Done writing at ${distpath}`);
 }
 
 /**

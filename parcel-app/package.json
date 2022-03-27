@@ -10,6 +10,7 @@
     "@tailwindcss/typography": "^0.5.1",
     "@types/yaml-front-matter": "^4.1.0",
     "@types/node": "^17.0.20",
+    "@types/marked": "^4.0.2",
     "autoprefixer": "^10.4.2",
     "concurrently": "^7.0.0",
     "nodemon": "^2.0.15",
@@ -21,23 +22,27 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@types/marked": "^4.0.2",
     "marked": "^4.0.12",
     "yaml-front-matter": "^4.1.1"
   },
   "app": "dist/index.html",
   "targets": {
-    "main": {
-      "publicUrl": "/"
+    "main": false,
+    "default": {
+      "distDir": "dist-prod",
+      "engines": {
+        "browsers": ">= 5%, last 2 versions, not dead"
+      },
+      "context": "browser"
     }
   },
   "scripts": {
-    "start-parcel": "yarn parcel \".\\src\\index.html\" --no-cache",
-    "start-mdprocess": "nodemon ./data-md/build-data.js --watch ./data-md",
+    "start-parcel": "yarn parcel src/index.html --no-cache",
+    "start-mdprocess": "nodemon data-md/build-data.js --watch data-md",
     "start-tscmd": "tsc-watch --target es2021 --module commonjs ./data-md/build-data.ts --outDir ./data-md/ --onSuccess \"node ./data-md/build-data.js\"",
     "start": "concurrently \"npm:start-parcel\" \"npm:start-tscmd\" -c magenta,cyan",
-    "build": "parcel build \".\\src\\index.html\" --no-cache --dist-dir \".\\dist-prod\"",
-    "build-indexes": "tsc --target es2021 --module commonjs ./data-md/build-data.ts --outDir ./data-md/ --noEmit && node ./data-md/build-data.js",
-    "copy-files": "cp -r data-md/fr/ dist-prod/ && cp data-md/fr-index.json dist-prod/indexes/fr-index.json"
+    "build": "parcel build src/index.html --no-cache --dist-dir dist-prod/",
+    "build-indexes": "tsc data-md/build-data.ts --target es2021 --module commonjs --outDir data-md/ && node data-md/build-data.js",
+    "copy-files": "cp -r data-md/fr/ dist-prod/ && mkdir dist-prod/indexes/ && cp data-md/fr-index.json dist-prod/indexes/fr-index.json"
   }
 }
