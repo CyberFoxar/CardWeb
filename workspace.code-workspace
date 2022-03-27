@@ -6,5 +6,10 @@
         {
             "path": ".woodpecker"
         }
-    ]
+    ],
+    "settings": {
+        "yaml.schemas": {
+            "https://raw.githubusercontent.com/woodpecker-ci/woodpecker/master/pipeline/schema/schema.json": "build.y*"
+        }
+    }
 }

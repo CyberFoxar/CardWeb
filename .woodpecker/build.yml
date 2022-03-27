@@ -1,3 +1,4 @@
+branches: [master]
 pipeline:
   build:
     image: node:17
@@ -15,7 +16,7 @@ pipeline:
       - SSH_PORT=1422
     commands:
       - apk add --no-cache tar openssh-client ca-certificates bash
-#      - cd build && tar czvf ../build-${CI_BUILD_NUMBER}.tar.gz .-
+      #      - cd build && tar czvf ../build-${CI_BUILD_NUMBER}.tar.gz .-
       - mkdir -p ~/.ssh
       - chmod 700 ~/.ssh
       - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
@@ -24,9 +25,9 @@ pipeline:
       - ls -lah parcel-app/dist-prod
       - chmod 600 ~/.ssh/id_rsa
       - scp -P $SSH_PORT -r parcel-app/dist-prod/* $SSH_USER@$SSH_HOST:/sites/cardweb/
-#      - ssh ${SSH_USER}:$SSH_HOST 'chmod 700 ~/app/app.sh'
-#      - ssh ${SSH_USER}:$SSH_HOST 'cd ~/app && ./app.sh --file docker-compose-staging.yml up'
-#      - ssh ${SSH_USER}:$SSH_HOST 'cd ~/app && ./app.sh --file docker-compose-staging.yml update
+    #      - ssh ${SSH_USER}:$SSH_HOST 'chmod 700 ~/app/app.sh'
+    #      - ssh ${SSH_USER}:$SSH_HOST 'cd ~/app && ./app.sh --file docker-compose-staging.yml up'
+    #      - ssh ${SSH_USER}:$SSH_HOST 'cd ~/app && ./app.sh --file docker-compose-staging.yml update
     secrets:
       - ssh_key
 #  upload:
