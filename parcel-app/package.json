@@ -1,9 +1,16 @@
 {
   "name": "cardweb",
-  "description": "A website to serve card, loosely based on Devdocs.io's concept of SSO and offline-capable app",
+  "description": "A website to serve card rules, loosely based on Devdocs.io's concept of SPA and offline-capable app",
   "version": "0.0.1",
   "author": {
-    "name": "CyberFoxar"
+    "name": "CyberFoxar",
+    "email": "cyberfoxar@free.fr"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://git.xorus.dev/CyberFoxar/CardWeb"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.3.1",
@@ -37,7 +44,7 @@
     }
   },
   "scripts": {
-    "start-parcel": "yarn parcel src/index.html --no-cache",
+    "start-parcel": "yarn parcel src/index.html",
     "start-mdprocess": "nodemon data-md/build-data.js --watch data-md",
     "start-tscmd": "tsc-watch --target es2021 --module commonjs ./data-md/build-data.ts --outDir ./data-md/ --onSuccess \"node ./data-md/build-data.js\"",
     "start": "concurrently \"npm:start-parcel\" \"npm:start-tscmd\" -c magenta,cyan",

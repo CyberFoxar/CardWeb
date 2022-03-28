@@ -52,7 +52,20 @@ Pour build & deploy:
 - cp data-md/fr-index.json dist/main/indexes/fr-index.json
 
 See [this file](../../.woodpecker/build.yml) for info.
-Also fixed Parcel not bundling stuff: 
+Also fixed Parcel not bundling stuff: The targets were all wrong, if the parcel is a 'main', it won't bundle libraries.
+
+# 2022-03-28
+Currently investigating how I'll handle absolutly different pages for my stuff.
+'cause I want at least a few "things":
+- sidebar
+- Searchbar
+- header?
+- page for search results
+- page with a full listing of everything (Kinda like a sitemap) + quick "download / put in cache" ability
+- homepage
+
+And few of those things are very different beasts, and should be compartimentalized.
+So I found [lit](https://lit.dev/) which is a very lightweight web component library. I might use it, but I need to understand how everything will mesh with everything else. branch time ?
 
 
 # Todo:
