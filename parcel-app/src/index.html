@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles/styles.css" />
-    <title>My First Parcel App</title>
+    <title>CardWeb AWR</title>
 </head>
 
 <body>
@@ -21,7 +21,7 @@
         <nav class="cw-sidebar pl-4
         fixed left invisible dark:bg-gray-700/100 z-40 ml-auto
         lg:max-w-xs lg:relative lg:flex-initial lg:bg-inherit lg:z-auto lg:visible">
-        <!-- Above, everything is mobile first then lg breakpoint for bigger screens. -->
+            <!-- Above, everything is mobile first then lg breakpoint for bigger screens. -->
             <a class="no-underline text-pink-200">CardWeb</a>
             <div id="indexEntries">
                 <!-- To be replaced by a search bar of some sort -->
@@ -29,17 +29,22 @@
                 <!-- Temp placement move into sidebar -->
             </div>
             <div id="generated-menu" class="generated-menu">
-                <!-- Where the document explorer goes -->
+                <!-- Where the document explorer / TOC goes -->
             </div>
         </nav>
 
-        <div id="container" class="flex-auto basis-4/5 prose dark:prose-invert m-4 md:mr-auto">
-            <!-- Where Markdown and content lives -->
-        </div>
+        <div id="container" class="flex-auto flex-wrap basis-4/5 m-4 md:mr-auto">
+            <homepage-view></homepage-view>
+            <md-view markdownFileText="">
+                <!-- Where Markdown and content lives -->
+            </md-view>
 
+        </div>
     </div>
 
     <script src="./ts/main.ts" type="module"></script>
+    <script src="./ts/components/markdown-vis/md-view.ts" type="module"></script>
+    <script src="./ts/components/homepage/home.ts" type="module"></script>
 </body>
 
 </html>

@@ -1,24 +1,13 @@
 // import fm from "../../node_modules/front-matter/index";
 import { marked } from "marked";
-import * as yamlFront from "yaml-front-matter";
-import { MarkdownToc } from "./MarkdownToc";
+import { MarkdownViewElement } from "./components/markdown-vis/md-view";
 import { Index } from "./models/Index.model";
-
-/** Element to place the generated-from-markdown html in */
-var container = document.getElementById("container");
 
 /** Menu that we'll place the ToC elements in */
 var generatedMenu: HTMLElement | null = document.getElementById("generated-menu");
-var TOC = new MarkdownToc();
 
 // TODO: Change
 const markdownDocumentsUrl = "/fr/";
-
-// Necessary to have our own slugger, because we don't want to use default one.
-// A bit hacky, but basically we need to have our own slugger to not interfere with marked's.
-// And we still need to have a slugger since it's him who keep track (and makes) unique URLs.
-// See: https://github.com/markedjs/marked/blob/master/src/Slugger.js
-var slugger = new marked.Slugger(); 
 
 async function main() {
     // loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
@@ -55,29 +44,13 @@ export async function loadMarkdownFromUrl(url: string) {
 }
 
 export function loadMarkdown(text: string){
-    if(!generatedMenu){
-        throw new Error("No generated-menu element found");
-    }
-    if(!container){
-        throw new Error("No container element found");
-    }
 
-    TOC = new MarkdownToc();
+    var mdView = document.getElementsByTagName("md-view")[0];
 
-    // Clear menu
-    while(generatedMenu.firstChild){
-        generatedMenu.removeChild(generatedMenu.firstChild);
-    }
+    mdView.generatedMenu = generatedMenu;
+    mdView.setAttribute("markdownFileText", text);
+    mdView.requestUpdate();
 
-    const fmDoc = yamlFront.loadFront(text);
-    slugger = new marked.Slugger();
-    const markedHTML = marked(fmDoc.__content);
-
-    // At this point, TOC is filled with our items
-    const ul = TOC.toUl();
-    generatedMenu.appendChild(ul);
-
-    container.innerHTML = markedHTML;
 }
 
 export async function loadIndex(url: string){
@@ -108,42 +81,42 @@ export function saveToIndexedDb(url: string, text: string) {
 // Override function
 // WARN: Code assumes that my lexer and marked's are on the same page, but that might not be the case.
 // I should probably handle that better.
-const tokenizer: marked.TokenizerObject = {
-    heading(this: marked.TokenizerThis, src: string) {
-        // Add side-effect of putting a nice link in our menu for quick navigation
+// const tokenizer: marked.TokenizerObject = {
+//     heading(this: marked.TokenizerThis, src: string) {
+//         // Add side-effect of putting a nice link in our menu for quick navigation
 
-        // @ts-ignore -- see https://github.com/markedjs/marked/blob/7c09bb0a62d8abf5ceaaeccca5b9d41f705a2c9a/lib/marked.esm.js#L1043
-        const cap = marked.Lexer.rules.block.heading.exec(src);
-        if (cap) {
-            let [, depth, text] = cap;
-            const slugText = slugger.slug(text);
+//         // @ts-ignore -- see https://github.com/markedjs/marked/blob/7c09bb0a62d8abf5ceaaeccca5b9d41f705a2c9a/lib/marked.esm.js#L1043
+//         const cap = marked.Lexer.rules.block.heading.exec(src);
+//         if (cap) {
+//             let [, depth, text] = cap;
+//             const slugText = slugger.slug(text);
 
-            depth = depth.length;
+//             depth = depth.length;
 
-            // console.log("Adding TOC item with text ", slugText , "and level ", depth);
-            TOC.addTocItem('#' + slugText, text, depth);
+//             // console.log("Adding TOC item with text ", slugText , "and level ", depth);
+//             TOC.addTocItem('#' + slugText, text, depth);
             
-        }
+//         }
 
-        // Return false to use the og marked tokenizer
-        return false;
-    },
-    lheading(this: marked.TokenizerThis, src: string){
-        // Add side-effect of putting a nice link in our menu for quick navigation
+//         // Return false to use the og marked tokenizer
+//         return false;
+//     },
+//     lheading(this: marked.TokenizerThis, src: string){
+//         // Add side-effect of putting a nice link in our menu for quick navigation
 
-        // @ts-ignore
-        const cap = marked.Lexer.rules.block.lheading.exec(src);
-        if(cap){
-            const depth = cap[2].charAt(0) === '=' ? 1 : 2;
-            const text = cap[1];
-            const slugText = slugger.slug(text);
+//         // @ts-ignore
+//         const cap = marked.Lexer.rules.block.lheading.exec(src);
+//         if(cap){
+//             const depth = cap[2].charAt(0) === '=' ? 1 : 2;
+//             const text = cap[1];
+//             const slugText = slugger.slug(text);
     
-            // console.log("Adding TOC item with text ", slugText , "and level ", depth);
-            TOC.addTocItem('#' + slugText, text, depth);
-        }
-        return false;
-    }
-};
+//             // console.log("Adding TOC item with text ", slugText , "and level ", depth);
+//             TOC.addTocItem('#' + slugText, text, depth);
+//         }
+//         return false;
+//     }
+// };
 
-marked.use({ tokenizer });
+// marked.use({ tokenizer });
 main();
