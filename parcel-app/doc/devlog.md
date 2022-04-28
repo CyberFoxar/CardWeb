@@ -67,6 +67,11 @@ Currently investigating how I'll handle absolutly different pages for my stuff.
 And few of those things are very different beasts, and should be compartimentalized.
 So I found [lit](https://lit.dev/) which is a very lightweight web component library. I might use it, but I need to understand how everything will mesh with everything else. branch time ?
 
+# 2022-04-20 
+(date a peu près)\
+Bricolages avec Lit. Déplacé des trucs ailleurs.
+Prochaine étape: mettre un routeur pour afficher selectivement des composant en fonction de où on est sur le site.
+
 
 # Todo:
 See [Reseach](useful-things-research.md).
