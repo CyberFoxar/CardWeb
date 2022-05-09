@@ -28,12 +28,16 @@
                 <!-- Where the available documents are -->
                 <!-- Temp placement move into sidebar -->
             </div>
+
+            <router-link href="/test">test</router-link>
+
             <div id="generated-menu" class="generated-menu">
                 <!-- Where the document explorer / TOC goes -->
             </div>
         </nav>
 
         <div id="container" class="flex-auto flex-wrap basis-4/5 m-4 md:mr-auto">
+            <router-outlet></router-outlet>
             <homepage-view></homepage-view>
             <md-view markdownFileText="">
                 <!-- Where Markdown and content lives -->
@@ -41,10 +45,11 @@
 
         </div>
     </div>
-
     <script src="./ts/main.ts" type="module"></script>
     <script src="./ts/components/markdown-vis/md-view.ts" type="module"></script>
     <script src="./ts/components/homepage/home.ts" type="module"></script>
+    <script src="./ts/components/routing-components/router.ts" type="module"></script>
+    <script src="./ts/components/routing-components/router-link.ts" type="module"></script>
 </body>
 
 </html>
