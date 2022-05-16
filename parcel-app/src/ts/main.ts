@@ -1,7 +1,5 @@
-// import fm from "../../node_modules/front-matter/index";
-import { marked } from "marked";
-import { MarkdownViewElement } from "./components/markdown-vis/md-view";
 import { Index } from "./models/Index.model";
+import { getState } from "./utils/AppState";
 
 /** Menu that we'll place the ToC elements in */
 var generatedMenu: HTMLElement | null = document.getElementById("generated-menu");
@@ -13,7 +11,7 @@ async function main() {
     // loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
     // document.getElementById("8-americain")!.onclick = () => loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
     // document.getElementById("ascenceur")!.onclick = () => loadMarkdownFromUrl("http://localhost:8080/ascenceur.md");
-    loadIndex("/indexes/fr-index.json");
+    loadIndex("/fr-index.json");
 
     // Snippet from: https://tailwindcss.com/docs/dark-mode
     // // On page load or when changing themes, best to add inline in `head` to avoid FOUC
@@ -70,53 +68,14 @@ export async function loadIndex(url: string){
         entryElement.addEventListener("click", () => loadMarkdownFromUrl(markdownDocumentsUrl + entry.location));
 
         entryMenu.appendChild(entryElement);
-    })
+    });
+    // Save index somewhere I can use everywhere
+    console.log(response, text, index, getState());
+    getState().currentIndex = index;
 }
 
 export function saveToIndexedDb(url: string, text: string) {
-    
+    // TODO
 }
 
-
-// Override function
-// WARN: Code assumes that my lexer and marked's are on the same page, but that might not be the case.
-// I should probably handle that better.
-// const tokenizer: marked.TokenizerObject = {
-//     heading(this: marked.TokenizerThis, src: string) {
-//         // Add side-effect of putting a nice link in our menu for quick navigation
-
-//         // @ts-ignore -- see https://github.com/markedjs/marked/blob/7c09bb0a62d8abf5ceaaeccca5b9d41f705a2c9a/lib/marked.esm.js#L1043
-//         const cap = marked.Lexer.rules.block.heading.exec(src);
-//         if (cap) {
-//             let [, depth, text] = cap;
-//             const slugText = slugger.slug(text);
-
-//             depth = depth.length;
-
-//             // console.log("Adding TOC item with text ", slugText , "and level ", depth);
-//             TOC.addTocItem('#' + slugText, text, depth);
-            
-//         }
-
-//         // Return false to use the og marked tokenizer
-//         return false;
-//     },
-//     lheading(this: marked.TokenizerThis, src: string){
-//         // Add side-effect of putting a nice link in our menu for quick navigation
-
-//         // @ts-ignore
-//         const cap = marked.Lexer.rules.block.lheading.exec(src);
-//         if(cap){
-//             const depth = cap[2].charAt(0) === '=' ? 1 : 2;
-//             const text = cap[1];
-//             const slugText = slugger.slug(text);
-    
-//             // console.log("Adding TOC item with text ", slugText , "and level ", depth);
-//             TOC.addTocItem('#' + slugText, text, depth);
-//         }
-//         return false;
-//     }
-// };
-
-// marked.use({ tokenizer });
 main();

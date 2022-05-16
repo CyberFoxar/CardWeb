@@ -71,6 +71,10 @@ So I found [lit](https://lit.dev/) which is a very lightweight web component lib
 (date a peu près)\
 Bricolages avec Lit. Déplacé des trucs ailleurs.
 Prochaine étape: mettre un routeur pour afficher selectivement des composant en fonction de où on est sur le site.
+Had to do some magic to use markdown anchors, but I've managed to keep the custom in its own little component.
+
+# 2022-05-16
+
 
 
 # Todo:

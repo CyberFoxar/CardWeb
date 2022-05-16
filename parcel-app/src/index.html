@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div class="flex flex-columns">
+    <div class="flex flex-columns flex-auto">
         <!-- Page -->
         <div class="fixed top-2 left-2 z-50 lg:hidden">
             <!-- Burger -->
@@ -22,7 +22,7 @@
         fixed left invisible dark:bg-gray-700/100 z-40 ml-auto
         lg:max-w-xs lg:relative lg:flex-initial lg:bg-inherit lg:z-auto lg:visible">
             <!-- Above, everything is mobile first then lg breakpoint for bigger screens. -->
-            <a class="no-underline text-pink-200">CardWeb</a>
+            <router-link href="/" class="no-underline"><a class="no-underline text-pink-200">CardWeb</a></router-link>
             <div id="indexEntries">
                 <!-- To be replaced by a search bar of some sort -->
                 <!-- Where the available documents are -->
@@ -38,16 +38,10 @@
 
         <div id="container" class="flex-auto flex-wrap basis-4/5 m-4 md:mr-auto">
             <router-outlet></router-outlet>
-            <homepage-view></homepage-view>
-            <md-view markdownFileText="">
-                <!-- Where Markdown and content lives -->
-            </md-view>
 
         </div>
     </div>
     <script src="./ts/main.ts" type="module"></script>
-    <script src="./ts/components/markdown-vis/md-view.ts" type="module"></script>
-    <script src="./ts/components/homepage/home.ts" type="module"></script>
     <script src="./ts/components/routing-components/router.ts" type="module"></script>
     <script src="./ts/components/routing-components/router-link.ts" type="module"></script>
 </body>

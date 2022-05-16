@@ -35,7 +35,7 @@
     },
     {
       "tags": "belote, standard-deck, 4 players, easy",
-      "id": "Belote",
+      "id": "belote",
       "playercount": {
         "min": 4,
         "max": 4
@@ -51,7 +51,7 @@
     },
     {
       "tags": "kilo de merde, tas de merde, standard-deck, 3-10 players, easy",
-      "id": "Kilo de merde",
+      "id": "kilo-de-merde",
       "playercount": {
         "min": 3,
         "max": 10
@@ -67,7 +67,7 @@
     },
     {
       "tags": "Président, tas de merde, standard-deck, 4-6 players, easy",
-      "id": "President",
+      "id": "president",
       "playercount": {
         "min": 4,
         "max": 6

@@ -7,31 +7,43 @@ import { customElement } from 'lit/decorators.js';
 class RouterComponent extends router(navigator(outlet(LitElement))) {
 
     private activeRoute: string | undefined;
+    private params: any | undefined;
 
     static routes: Routes =
         [
             {
-                name: "home",
-                pattern: "",
-            },
-            {
                 name: "test",
                 pattern: "test",
-            }
+            },
+            {
+                name: "rule",
+                pattern: "rule/:id",
+            },
+            {
+                name: "home",
+                pattern: "*",
+            },
         ];
 
     router(route?: string, params?: object, query?: object, data?: object) {
         this.activeRoute = route;
-        console.log('route:', route, 'params:', params, 'query:', query, 'data:', data);	
+        this.params = params;
+        console.log('route:', route, 'params:', params, 'query:', query, 'data:', data);
     }
 
     render() {
+        console.log(window.cwAppState.currentIndex);
+
         return html`
         <router-link href="/">hom</router-link>
         <router-link href="/test">test</router-link>
+        <router-link href="/rule/ascenseur">rule</router-link>
 
-        <h1 route="home">Home !</h1>
         <h1 route="test"> Test !</h1>
+        <homepage-view route="home"></homepage-view>
+        <div route="rule">
+            <md-view  markdownFileText="${this.params.id}" ></md-view>
+        </div>
     `;
 
     }
@@ -41,10 +53,16 @@ class RouterComponent extends router(navigator(outlet(LitElement))) {
         this.navigate(event.target.href);
     }
 
+    constructor() {
+        super();
+        this.activeRoute = '/';
+        this.params = {};
+    }
+
 }
 
 declare global {
     interface HTMLElementTagNameMap {
-      "router-outlet": RouterComponent;
+        "router-outlet": RouterComponent;
     }
 }

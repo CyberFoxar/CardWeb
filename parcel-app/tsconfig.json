@@ -5,6 +5,11 @@
       "module": "esnext",
       "target": "es2021",
       "strict": true,
-      "moduleResolution": "node"
+      "moduleResolution": "node",
+      "baseUrl": ".",
+      "paths": {
+        "~*": ["./*"]
+      },
+      "esModuleInterop": true,
     }
   }

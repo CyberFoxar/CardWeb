@@ -48,9 +48,10 @@ function main() {
       const parsed = yamlFront.loadFront(data);
       const playercount = parseRange(parsed.playercount);
       const playtime = parseRange(parsed.playtime);
+      const id = encodeURI(parsed.title.toLowerCase().replace(/\s/g, '-'));
       const entry = new IndexEntry(
         parsed.tags, 
-        parsed.title, 
+        id, 
         playercount, 
         parsed.complexity, 
         playtime, 

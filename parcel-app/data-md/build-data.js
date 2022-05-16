@@ -43,7 +43,8 @@ function main() {
             const parsed = yamlFront.loadFront(data);
             const playercount = parseRange(parsed.playercount);
             const playtime = parseRange(parsed.playtime);
-            const entry = new IndexEntry(parsed.tags, parsed.title, playercount, parsed.complexity, playtime, lastEdit, encodeURI(fullFilename), parsed.__content);
+            const id = encodeURI(parsed.title.toLowerCase().replace(/\s/g, '-'));
+            const entry = new IndexEntry(parsed.tags, id, playercount, parsed.complexity, playtime, lastEdit, encodeURI(fullFilename), parsed.__content);
             index.entries.push(entry);
         }
     });
