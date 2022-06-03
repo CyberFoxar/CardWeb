@@ -1,5 +1,9 @@
 import { Index } from "./models/Index.model";
 import { getState } from "./utils/AppState";
+import '../styles/styles.css';
+
+import "./components/routing-components/router";
+import "./components/routing-components/router-link";
 
 /** Menu that we'll place the ToC elements in */
 var generatedMenu: HTMLElement | null = document.getElementById("generated-menu");
@@ -11,7 +15,7 @@ async function main() {
     // loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
     // document.getElementById("8-americain")!.onclick = () => loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
     // document.getElementById("ascenceur")!.onclick = () => loadMarkdownFromUrl("http://localhost:8080/ascenceur.md");
-    loadIndex("/fr-index.json");
+    loadIndex("/fr/fr-index.json");
 
     // Snippet from: https://tailwindcss.com/docs/dark-mode
     // // On page load or when changing themes, best to add inline in `head` to avoid FOUC

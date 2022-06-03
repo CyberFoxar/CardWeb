@@ -83,14 +83,14 @@ export class MarkdownViewElement extends LitElement {
             return null;
         }
 
-        if (!this.generatedMenu) {
-            throw new Error("No generated-menu element found");
-        }
+        // if (!this.generatedMenu) {
+        //     throw new Error("No generated-menu element found");
+        // }
 
         // Clear menu
-        while (this.generatedMenu.firstChild) {
-            this.generatedMenu.removeChild(this.generatedMenu.firstChild);
-        }
+        // while (this.generatedMenu.firstChild) {
+        //     this.generatedMenu.removeChild(this.generatedMenu.firstChild);
+        // }
 
         const fmDoc = yamlFront.loadFront(this.markdownFileText);
 
@@ -101,7 +101,7 @@ export class MarkdownViewElement extends LitElement {
         // At this point, TOC is filled with our items
         const ul = this.TOC.toUl();
         console.log(this.generatedMenu, this.TOC);
-        this.generatedMenu.appendChild(ul);
+        // this.generatedMenu.appendChild(ul);
 
         return html`
         <div class="prose dark:prose-invert">${unsafeHTML(markedHTML)}</div>

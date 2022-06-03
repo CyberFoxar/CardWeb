@@ -3,6 +3,10 @@ import { outlet, router, navigator, Routes } from 'lit-element-router';
 
 import { customElement } from 'lit/decorators.js';
 
+// Import components for webpack
+import '../homepage/home';
+import '../markdown-vis/md-view';
+
 @customElement('router-outlet')
 class RouterComponent extends router(navigator(outlet(LitElement))) {
 
@@ -42,7 +46,8 @@ class RouterComponent extends router(navigator(outlet(LitElement))) {
         <h1 route="test"> Test !</h1>
         <homepage-view route="home"></homepage-view>
         <div route="rule">
-            <md-view  markdownFileText="${this.params.id}" ></md-view>
+            <!-- <md-view  markdownFileText="${this.params.id}" ></md-view> -->
+            <md-view  markdownFileText="${window.cwAppState.currentIndex!.entries[0].content as string}" ></md-view>
         </div>
     `;
 

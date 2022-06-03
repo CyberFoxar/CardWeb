@@ -5,8 +5,8 @@ import * as yamlFront from "yaml-front-matter";
 // @ts-ignore -- importing using typescript does not work for some reason
 // const fm = require('front-matter');
 
-const dir = './data-md/';
-const distDir = '../dist/indexes/';
+const dir = './fr/';
+const distDir = '../dist/';
 // Use glob ?
 // Use copyfiles ?
 // Use something else ?
@@ -71,10 +71,10 @@ function main() {
   fs.writeFileSync(dirpath, JSON.stringify(index, null, 2));
 
   // Copy file to dist
-  // fs.copyFileSync(dirpath, distpath);
+  fs.copyFileSync(dirpath, distpath);
 
-  // console.log(getFiles(dir));
-  // console.log(`Done writing at ${distpath}`);
+  console.log(getFiles(dir));
+  console.log(`Done writing at ${distpath}`);
 }
 
 /**
