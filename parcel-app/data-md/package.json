@@ -5,7 +5,8 @@
   "main": "build-data.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc-watch --target es2021 --module commonjs ./src/build-data.ts --outDir ./dist/ --onSuccess \"node ./dist/build-data.js\""
+    "start": "tsc-watch --target es2021 --module commonjs ./src/build-data.ts --outDir ./dist/ --onSuccess \"node ./dist/build-data.js\"",
+    "build": "tsc ./src/build-data.ts --target es2021 --module commonjs --outDir ./dist/ && node ./dist/build-data.js"
   },
   "author": "",
   "license": "ISC",

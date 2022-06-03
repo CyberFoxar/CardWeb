@@ -4,13 +4,23 @@ export class State {
     public currentIndex: Index | undefined;
 
     constructor() { 
-        console.log("constructor");
-        this.currentIndex = undefined;
+        if(window.localStorage.getItem('cwAppState')) {
+            Object.assign(this, JSON.parse(window.localStorage.getItem('cwAppState')!));
+        }
+        else {
+            this.currentIndex = undefined;
+        }
+    }
+
+    /**
+     * Save current state to localStorage
+     */
+    save() {
+        window.localStorage.setItem('cwAppState', JSON.stringify(this));
     }
 }
 
 export function getState() {
-    console.log("getState");
     if(window.cwAppState === undefined) {
         window.cwAppState = new State();
     }

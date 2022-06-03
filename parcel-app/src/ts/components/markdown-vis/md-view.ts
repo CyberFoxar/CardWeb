@@ -12,7 +12,7 @@ export class MarkdownViewElement extends LitElement {
     @property()
     public markdownFileText: string | null = "";
 
-    @property()
+    @property({ type: Object })
     public generatedMenu: HTMLElement | null = null;
 
     // Not state per-se, but also needed
@@ -21,18 +21,22 @@ export class MarkdownViewElement extends LitElement {
     // Necessary to have our own slugger, because we don't want to use default one.
     // A bit hacky, but basically we need to have our own slugger to not interfere with marked's.
     // And we still need to have a slugger since it's him who keep track (and makes) unique URLs.
+    // It is especially needed for titles that are duplicated (e.g. "Introduction" and "Introduction" will be slugged as "introduction" and "introduction-1")
     // See: https://github.com/markedjs/marked/blob/master/src/Slugger.js
     private slugger: marked.Slugger = new marked.Slugger();
 
-    // This is a workaround for anchor links not working in shadowDOM
-    // This component should not be in _any_ shadowDOM or the TOC anchor will break
-    // "Better" solution would be to use element.scrollIntoView but, eeeeh.
-    protected createRenderRoot() {
-        return this;
-    }
-
     constructor() {
         super();
+
+        // Shadowroot prevents us from using proper anchor links
+        // So we reimplement it from the change in URL
+        // This means grabbing the change, interpreting which title we want, then slugging it to query the right element to scroll to
+        window.addEventListener('hashchange', () => {
+            var slugger = new marked.Slugger();            
+            var selector = '#' + slugger.slug(decodeURI(location.hash).substring(1));
+            // console.log("selector:", selector);
+            this.shadowRoot!.querySelector(selector)!.scrollIntoView();
+        }, false);
 
         const that = this;
 
@@ -40,8 +44,6 @@ export class MarkdownViewElement extends LitElement {
         // Add side effect of filling a TOC when making tokens.
         const tokenizer: marked.TokenizerObject = {
             heading(this: marked.TokenizerThis, src: string) {
-                // Add side-effect of putting a nice link in our menu for quick navigation
-
                 // @ts-ignore -- see https://github.com/markedjs/marked/blob/7c09bb0a62d8abf5ceaaeccca5b9d41f705a2c9a/lib/marked.esm.js#L1043
                 const cap = marked.Lexer.rules.block.heading.exec(src);
                 if (cap) {
@@ -59,9 +61,7 @@ export class MarkdownViewElement extends LitElement {
                 return false;
             },
             lheading(this: marked.TokenizerThis, src: string) {
-                // Add side-effect of putting a nice link in our menu for quick navigation
-
-                // @ts-ignore
+                // @ts-ignore -- see above
                 const cap = marked.Lexer.rules.block.lheading.exec(src);
                 if (cap) {
                     const depth = cap[2].charAt(0) === '=' ? 1 : 2;
@@ -83,15 +83,6 @@ export class MarkdownViewElement extends LitElement {
             return null;
         }
 
-        // if (!this.generatedMenu) {
-        //     throw new Error("No generated-menu element found");
-        // }
-
-        // Clear menu
-        // while (this.generatedMenu.firstChild) {
-        //     this.generatedMenu.removeChild(this.generatedMenu.firstChild);
-        // }
-
         const fmDoc = yamlFront.loadFront(this.markdownFileText);
 
         this.slugger = new marked.Slugger();
@@ -99,21 +90,32 @@ export class MarkdownViewElement extends LitElement {
         const markedHTML = marked(fmDoc.__content);
 
         // At this point, TOC is filled with our items
-        const ul = this.TOC.toUl();
-        console.log(this.generatedMenu, this.TOC);
-        // this.generatedMenu.appendChild(ul);
+        this.generateMenu();
 
         return html`
         <div class="prose dark:prose-invert">${unsafeHTML(markedHTML)}</div>
-
         `;
 
+    }
+
+    generateMenu() {
+        if (!this.generatedMenu) {
+            console.error("No generated-menu element found, not building one.");
+            return;
+        }
+        // Clear menu
+        while (this.generatedMenu.firstChild) {
+            this.generatedMenu.removeChild(this.generatedMenu.firstChild);
+        }
+        const ul = this.TOC.toUl();
+        console.log(this.generatedMenu, this.TOC);
+        this.generatedMenu.appendChild(ul);
     }
 
 }
 
 declare global {
     interface HTMLElementTagNameMap {
-      "md-view": MarkdownViewElement;
+        "md-view": MarkdownViewElement;
     }
 }

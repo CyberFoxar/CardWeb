@@ -8,9 +8,11 @@ module.exports = {
     filename: 'bundles/[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
+    publicPath: '/'
   },
   devtool: 'inline-source-map',
   devServer: {
+    historyApiFallback: true,
     static: [
       {
         directory: path.join(__dirname, 'dist'),

@@ -1,9 +1,11 @@
 import { Index } from "./models/Index.model";
 import { getState } from "./utils/AppState";
-import '../styles/styles.css';
 
-import "./components/routing-components/router";
+import '../styles/styles.css';
 import "./components/routing-components/router-link";
+import "./components/routing-components/router";
+import { queryShadow } from "./utils/ShadowDomUtils";
+import { MarkdownViewElement } from "./components/markdown-vis/md-view";
 
 /** Menu that we'll place the ToC elements in */
 var generatedMenu: HTMLElement | null = document.getElementById("generated-menu");
@@ -47,12 +49,14 @@ export async function loadMarkdownFromUrl(url: string) {
 
 export function loadMarkdown(text: string){
 
-    var mdView = document.getElementsByTagName("md-view")[0];
-
-    mdView.generatedMenu = generatedMenu;
-    mdView.setAttribute("markdownFileText", text);
-    mdView.requestUpdate();
-
+    // var mdView = document.getElementsByTagName("md-view")[0];
+    var mdView = queryShadow(["router-outlet", "md-view"], "md-view") as  MarkdownViewElement;
+    console.log(mdView);
+    if (mdView){
+        mdView.generatedMenu = generatedMenu;
+        mdView.setAttribute("markdownFileText", text);
+        mdView.requestUpdate();
+    }
 }
 
 export async function loadIndex(url: string){
@@ -74,8 +78,9 @@ export async function loadIndex(url: string){
         entryMenu.appendChild(entryElement);
     });
     // Save index somewhere I can use everywhere
-    console.log(response, text, index, getState());
+    // console.log(response, text, index, getState());
     getState().currentIndex = index;
+    getState().save();
 }
 
 export function saveToIndexedDb(url: string, text: string) {

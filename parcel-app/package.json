@@ -41,7 +41,6 @@
     "build": "webpack",
     "start:dev": "webpack-dev-server --open",
     "start:md": "cd data-md && npm run start",
-    "build-indexes": "tsc data-md/build-data.ts --target es2021 --module commonjs --outDir data-md/ && node data-md/build-data.js",
     "copy-files": "cp -r data-md/fr/ dist-prod/ && mkdir dist-prod/indexes/ && cp data-md/fr-index.json dist-prod/indexes/fr-index.json"
   }
 }

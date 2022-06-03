@@ -22,3 +22,7 @@ We configure webpack-dev-server to have it serve the files
 
 # Fixing polyfill
 `yaml-front-matter` needs NodeJS.buffer as a polyfill, so we add the config in resolvers and `buffer`
+
+# Other stuff
+Now we also want to make our dev server handle any arbitrary route for our router to handle it:
+`historyApiFallback: true` (or config it better, but this work.)

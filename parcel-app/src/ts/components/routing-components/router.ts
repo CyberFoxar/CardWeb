@@ -1,17 +1,23 @@
 import { LitElement, html } from 'lit';
 import { outlet, router, navigator, Routes } from 'lit-element-router';
 
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
+import { getState } from '../../utils/AppState';
 
 // Import components for webpack
 import '../homepage/home';
 import '../markdown-vis/md-view';
 
 @customElement('router-outlet')
-class RouterComponent extends router(navigator(outlet(LitElement))) {
+export class RouterComponent extends router(navigator(outlet(LitElement))) {
 
     private activeRoute: string | undefined;
     private params: any | undefined;
+    private query: object | undefined;
+    private data: object | undefined;
+
+    @property({ type: Object})
+    public generatedMenu: HTMLElement | null = null;
 
     static routes: Routes =
         [
@@ -32,11 +38,13 @@ class RouterComponent extends router(navigator(outlet(LitElement))) {
     router(route?: string, params?: object, query?: object, data?: object) {
         this.activeRoute = route;
         this.params = params;
+        this.query = query;
+        this.data = data;
         console.log('route:', route, 'params:', params, 'query:', query, 'data:', data);
     }
 
     render() {
-        console.log(window.cwAppState.currentIndex);
+        console.log(getState());
 
         return html`
         <router-link href="/">hom</router-link>
@@ -47,7 +55,8 @@ class RouterComponent extends router(navigator(outlet(LitElement))) {
         <homepage-view route="home"></homepage-view>
         <div route="rule">
             <!-- <md-view  markdownFileText="${this.params.id}" ></md-view> -->
-            <md-view  markdownFileText="${window.cwAppState.currentIndex!.entries[0].content as string}" ></md-view>
+            <!-- <md-view  markdownFileText="${getState().currentIndex?.entries[6].content as string}"></md-view> -->
+            <md-view  markdownFileText=""></md-view>
         </div>
     `;
 
@@ -60,8 +69,9 @@ class RouterComponent extends router(navigator(outlet(LitElement))) {
 
     constructor() {
         super();
-        this.activeRoute = '/';
         this.params = {};
+        this.query = {};
+        this.data = {};
     }
 
 }
