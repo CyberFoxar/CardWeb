@@ -1,4 +1,4 @@
-import { Index } from "./models/Index.model";
+import { RuleIndex } from "./models/Index.model";
 import { getState } from "./utils/AppState";
 
 import '../styles/styles.css';
@@ -6,6 +6,7 @@ import "./components/routing-components/router-link";
 import "./components/routing-components/router";
 import { queryShadow } from "./utils/ShadowDomUtils";
 import { MarkdownViewElement } from "./components/markdown-vis/md-view";
+import { IndexedDB } from "./utils/IndexedDB";
 
 /** Menu that we'll place the ToC elements in */
 var generatedMenu: HTMLElement | null = document.getElementById("generated-menu");
@@ -32,6 +33,17 @@ async function main() {
     burgerToggles.forEach(element => {
         element.addEventListener("click", toggleSidebar);
     });
+
+    var db = new IndexedDB();
+    db.openDB(() => {
+        console.log("db opened");
+        db.addRule(getState()!.currentIndex!.entries[0], () => {
+            console.log('added?');
+            db.getRule(getState()!.currentIndex!.entries[0].id, (rule) => {
+                console.log('got?', rule);
+            });
+        });
+    });
 }
 
 function toggleSidebar() {
@@ -47,22 +59,22 @@ export async function loadMarkdownFromUrl(url: string) {
     loadMarkdown(text);
 }
 
-export function loadMarkdown(text: string){
+export function loadMarkdown(text: string) {
 
     // var mdView = document.getElementsByTagName("md-view")[0];
-    var mdView = queryShadow(["router-outlet", "md-view"], "md-view") as  MarkdownViewElement;
+    var mdView = queryShadow(["router-outlet", "md-view"], "md-view") as MarkdownViewElement;
     console.log(mdView);
-    if (mdView){
+    if (mdView) {
         mdView.generatedMenu = generatedMenu;
         mdView.setAttribute("markdownFileText", text);
         mdView.requestUpdate();
     }
 }
 
-export async function loadIndex(url: string){
+export async function loadIndex(url: string) {
     const response = await fetch(url);
     const text = await response.text();
-    const index = JSON.parse(text) as Index;
+    const index = JSON.parse(text) as RuleIndex;
 
     const entryMenu = document.getElementById("indexEntries")!;
 

@@ -87,13 +87,17 @@ Au passage, j'ai corrigé le composant markdown, plus besoin de casser le shadow
 J'ai un local storage rudimentaire mais qui fonctionne et se rappelle de trucs. C'est pas mal.
 J'ai aussi mis ma génération d'index dans son mini-projet a part.
 
+# 2022-06-07
+Fixed favicon somewhat
+First impl of IndexedDB
+
 # todo short term:
 Add IndexEntries in indexedDB
 Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such)
 Add better way to update TOC, maybe using events ?
   Like, when a document is "finished processing" you send an event to a lot of listeners with the new MarkdownTOC, would be better than replacing HTML inside divs, esp. for sidebar content.
 Add index entries link into homepage (so I can finally remove them from sidebar)
-Add fucking favicon (favicon made, but not implemented)
+Add fucking favicon (favicon made, but not implemented) DONE
 
 Merge into develop, fix CI/CD
 

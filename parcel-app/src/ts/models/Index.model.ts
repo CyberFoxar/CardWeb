@@ -1,10 +1,10 @@
-export class Index {
+export class RuleIndex {
     constructor(
         public lang: string,
-        public entries: IndexEntry[] = []) { }
+        public entries: Rule[] = []) { }
 }
 
-export class IndexEntry {
+export class Rule {
     constructor(
         public tags = [],
         public id: string,

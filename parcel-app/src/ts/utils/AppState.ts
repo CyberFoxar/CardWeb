@@ -1,7 +1,7 @@
-import { Index } from "../models/Index.model";
+import { RuleIndex } from "../models/Index.model";
 
 export class State {
-    public currentIndex: Index | undefined;
+    public currentIndex: RuleIndex | undefined;
 
     constructor() { 
         if(window.localStorage.getItem('cwAppState')) {
