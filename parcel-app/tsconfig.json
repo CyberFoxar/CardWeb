@@ -1,17 +1,18 @@
 {
     "include": ["src/**/*"],
     "compilerOptions": {
+      "useDefineForClassFields": false,
       "experimentalDecorators": true,
       "module": "esnext",
       "target": "es2021",
       "strict": true,
       "moduleResolution": "node",
+      "allowSyntheticDefaultImports": true,
       "baseUrl": ".",
       "paths": {
-        "*": [
-          "*",
-          "src/*"
-        ]
+        "~src/*": [
+          "./src/*"
+        ],
       },
       "esModuleInterop": true,
     }

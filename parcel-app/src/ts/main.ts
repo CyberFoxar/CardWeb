@@ -58,7 +58,7 @@ export async function loadMarkdownFromUrl(url: string) {
 export function loadMarkdown(text: string) {
 
     // var mdView = document.getElementsByTagName("md-view")[0];
-    var mdView = queryShadow(["router-outlet", "md-view"], "md-view") as MarkdownViewElement;
+    var mdView = queryShadow(["router-outlet", "md-fetch", "md-view"], "md-view") as MarkdownViewElement;
     console.log(mdView);
     if (mdView) {
         mdView.generatedMenu = generatedMenu;

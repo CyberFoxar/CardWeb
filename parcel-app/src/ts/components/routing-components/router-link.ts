@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 
 import { customElement, property } from 'lit/decorators.js';
-import { outlet, router, navigator, Routes } from 'lit-element-router';
+import { navigator } from 'lit-element-router';
 
 
 @customElement('router-link')

@@ -6,8 +6,7 @@ import { getState } from '../../utils/AppState';
 
 // Import components for webpack
 import '../homepage/home';
-import '../markdown-vis/md-view';
-
+import '../markdown-vis/md-fetch';
 @customElement('router-outlet')
 export class RouterComponent extends router(navigator(outlet(LitElement))) {
 
@@ -54,9 +53,7 @@ export class RouterComponent extends router(navigator(outlet(LitElement))) {
         <h1 route="test"> Test !</h1>
         <homepage-view route="home"></homepage-view>
         <div route="rule">
-            <!-- <md-view  markdownFileText="${this.params.id}" ></md-view> -->
-            <!-- <md-view  markdownFileText="${getState().currentIndex?.entries[6].content as string}"></md-view> -->
-            <md-view  markdownFileText=""></md-view>
+            <md-fetch id="${this.params.id}"></md-fetch>
         </div>
     `;
 

@@ -8,6 +8,7 @@ export class Rule {
     constructor(
         public tags = [],
         public id: string,
+        public location: string,
         public playercount?: {
             min: number,
             max: number,
@@ -18,10 +19,9 @@ export class Rule {
             max: number,
         },
         public lastupdated?: Date,
-        public location?: string,
         public content = '') {
         if (!id || id.length === 0) {
-            throw new Error(`IndexEntry with tags ${tags}: id is empty`);
+            throw new Error(`IndexEntry with tags ${tags} @location ${location} : id is empty`);
         }
     }
 }

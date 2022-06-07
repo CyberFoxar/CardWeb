@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
   entry: './src/ts/main.ts',
@@ -54,6 +55,7 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.ts', '.js', '.json'],
+    plugins: [new TsconfigPathsPlugin()],
     fallback: {
       buffer: require.resolve('buffer/'),
     },
