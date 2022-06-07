@@ -39,6 +39,7 @@ async function main() {
     db.addRule(getState()!.currentIndex!.entries[0]);
     var rule = await db.getRule(getState()!.currentIndex!.entries[0].id);
     console.log(rule);
+    db.getAllRules().then(rules => {console.log('rules:', rules)})
 }
 
 function toggleSidebar() {

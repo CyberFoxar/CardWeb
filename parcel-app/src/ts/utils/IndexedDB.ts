@@ -7,7 +7,7 @@ export class IndexedDB {
 
     constructor() {
         if (!window.indexedDB) {
-            console.log("Your browser doesn't support a stable version of IndexedDB. Offline storage of rules might not work (it'll be in your localStorage, maybe)");
+            console.log("Your browser doesn't support a stable version of IndexedDB. Offline storage of rules will not work.");
         }
         this.openDB();
     }
@@ -27,7 +27,7 @@ export class IndexedDB {
             };
             req.onerror = (event: Event) => {
                 console.error('error opening indexedDB', event);
-                reject(req.result);
+                reject(req.error);
             };
             req.onupgradeneeded = async (event: Event) => {
                 console.warn("upgrading indexedDB");
@@ -45,8 +45,7 @@ export class IndexedDB {
     public initDB(): Promise<IDBObjectStore> {
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                console.error("db not initialized");
-                reject();
+                reject("DB not initialized");
                 return;
             }
             const store = this.db.createObjectStore('saved-rules-fr', { keyPath: 'id' });
@@ -57,55 +56,53 @@ export class IndexedDB {
             };
             store.transaction.onerror = (event: Event) => {
                 console.error('error creating store', event);
-                reject(store);
+                reject(store.transaction.error);
             };
         });
     }
 
-    /**
-     * Add a single rule (IndexEntry) to the DB.
-     * Calls back once the transaction is complete with the result of the transaction (i.e. the added key or undefined if there was an error).
-     * @param rule 
-     * @param callback 
-     */
     public addRule(rule: Rule): Promise<IDBValidKey> {
-        return new Promise((resolve, reject) => {
-            if (!this.db) {
-                console.error("db not initialized");
-                reject();
-                return;
-            }
-            const tx = this.db.transaction('saved-rules-fr', 'readwrite');
-            const store = tx.objectStore('saved-rules-fr');
-            const req = store.add(rule);
-            req.onsuccess = (event: Event) => {
-                resolve(req.result);
-            };
-            req.onerror = (event: Event) => {
-                console.error('error adding rule', event);
-                reject(req.result);
-            };
-        });
+        return this.storeOperation('saved-rules-fr', 'readwrite', (store) => store.add(rule));
+    }
+
+    public deleteRule(id: string): Promise<void> {
+        return this.storeOperation('saved-rules-fr', 'readwrite', (store) => store.delete(id));
+    }
+
+    public putRule(rule: Rule): Promise<void> {
+        return this.storeOperation('saved-rules-fr', 'readwrite', (store) => store.put(rule));
     }
 
     public getRule(id: string): Promise<Rule> {
         console.log("getting rule", id);
+        return this.storeOperation('saved-rules-fr', 'readonly', (store) => store.get(id));
+    }
 
+    public getAllRules(): Promise<Rule[]> {
+        return this.storeOperation('saved-rules-fr', 'readonly', (store) => store.getAll())
+    }
+
+    /**
+     * Execute a request operation on the given store.
+     * @param storeName 
+     * @param mode 
+     * @param operation 
+     * @returns Promisified version of the transaction with either the transation result in resolve or the transaction error in reject
+     */
+    private storeOperation<T>(storeName: string, mode: IDBTransactionMode = 'readonly', operation: (store: IDBObjectStore) => IDBRequest): Promise<T>{
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                console.error("db not initialized");
-                reject();
+                reject("DB not initialized");
                 return;
             }
-            const tx = this.db.transaction('saved-rules-fr', 'readonly');
-            const store = tx.objectStore('saved-rules-fr');
-            const req = store.get(id);
+            const tx = this.db.transaction(storeName, mode);
+            const store = tx.objectStore(storeName);
+            const req = operation(store);
             req.onsuccess = (event: Event) => {
                 resolve(req.result);
             };
             req.onerror = (event: Event) => {
-                console.error('error adding rule', event);
-                reject(req.result);
+                reject(req.error);
             };
         });
     }
