@@ -38,6 +38,10 @@ module.exports = {
           },
         }],
       },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
     ],
   },
   plugins: [
@@ -45,6 +49,7 @@ module.exports = {
       title: 'Cardweb',
       filename: 'index.html',
       template: 'src/index.html',
+      favicon: 'src/assets/favicon.png',
     })
   ],
   resolve: {

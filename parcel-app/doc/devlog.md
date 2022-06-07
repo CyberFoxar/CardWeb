@@ -74,10 +74,30 @@ Prochaine étape: mettre un routeur pour afficher selectivement des composant en
 Had to do some magic to use markdown anchors, but I've managed to keep the custom in its own little component.
 
 # 2022-05-16
+did ~things~, but unsure what. Done lots of research on webpack/parcel/rollup I guess
 
+# 2022-06-04
+ENFIN implémenté webpack proprement:
+- webserver correct
+- tailwind + postCSS
+- lit qui fonctionne
+et d'autres trucs. Voir [ce document](./webpackinstall.md).
 
+Au passage, j'ai corrigé le composant markdown, plus besoin de casser le shadow-dom pour faire les ancres, ça fonctionne semi-tout seul. Je dois quand même aller fouiller dans les shadow-dom pour lui donner le menu a remplir mais ça avance.
+J'ai un local storage rudimentaire mais qui fonctionne et se rappelle de trucs. C'est pas mal.
+J'ai aussi mis ma génération d'index dans son mini-projet a part.
 
-# Todo:
+# todo short term:
+Add IndexEntries in indexedDB
+Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such)
+Add better way to update TOC, maybe using events ?
+  Like, when a document is "finished processing" you send an event to a lot of listeners with the new MarkdownTOC, would be better than replacing HTML inside divs, esp. for sidebar content.
+Add index entries link into homepage (so I can finally remove them from sidebar)
+Add fucking favicon (favicon made, but not implemented)
+
+Merge into develop, fix CI/CD
+
+# Todo long term:
 See [Reseach](useful-things-research.md).
 
 - Definir un format de données ✅
