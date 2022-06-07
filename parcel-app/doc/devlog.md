@@ -90,6 +90,7 @@ J'ai aussi mis ma génération d'index dans son mini-projet a part.
 # 2022-06-07
 Fixed favicon somewhat
 First impl of IndexedDB
+Second impl -- now with promises, but not really full, tho.
 
 # todo short term:
 Add IndexEntries in indexedDB

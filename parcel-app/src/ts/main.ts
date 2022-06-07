@@ -35,15 +35,10 @@ async function main() {
     });
 
     var db = new IndexedDB();
-    db.openDB(() => {
-        console.log("db opened");
-        db.addRule(getState()!.currentIndex!.entries[0], () => {
-            console.log('added?');
-            db.getRule(getState()!.currentIndex!.entries[0].id, (rule) => {
-                console.log('got?', rule);
-            });
-        });
-    });
+    await db.openDB();
+    db.addRule(getState()!.currentIndex!.entries[0]);
+    var rule = await db.getRule(getState()!.currentIndex!.entries[0].id);
+    console.log(rule);
 }
 
 function toggleSidebar() {
