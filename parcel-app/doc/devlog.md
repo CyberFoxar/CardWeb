@@ -93,12 +93,12 @@ First impl of IndexedDB
 Second impl -- now with promises, but not really full, tho.
 
 # todo short term:
-Add IndexEntries in indexedDB
-Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such)
+~~Add IndexEntries in indexedDB -- DONE~~ (need to do it better, but works good enough for now)
+Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such) -- on it
 Add better way to update TOC, maybe using events ?
   Like, when a document is "finished processing" you send an event to a lot of listeners with the new MarkdownTOC, would be better than replacing HTML inside divs, esp. for sidebar content.
 Add index entries link into homepage (so I can finally remove them from sidebar)
-Add fucking favicon (favicon made, but not implemented) DONE
+~~Add fucking favicon (favicon made, but not implemented) DONE~~
 
 Merge into develop, fix CI/CD
 

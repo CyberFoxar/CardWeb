@@ -41,18 +41,23 @@ export class MarkdownFetchElement extends LitElement {
         this.loading = false;
     }
 
+    loader = html`
+    <div> Loader? </div>
+    `;
+
 
     protected render(): unknown {
 
-        if(this.currentLoadedRuleText.length === 0) {
+        if(!this.id && this.currentLoadedRuleText.length === 0 && !this.loading) {
+            console.log("No id or no index to fetch from");
             return html`
             <div>No need to fetch or render md :3</div>
             `;
         }
 
         return html`
-            <div ?hidden="${!this.loading}">This is a loader, trust me bro ${this.loading}</div>
-            <md-view markdownFileText="${this.currentLoadedRuleText!}"></md-view>
+            ${this.loading ? this.loader : ''}
+            <md-view markdownFileText="${this.currentLoadedRuleText}"></md-view>
         `;
 
     }

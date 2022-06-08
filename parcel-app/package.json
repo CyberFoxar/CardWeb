@@ -40,7 +40,7 @@
   },
   "scripts": {
     "build": "webpack",
-    "start:dev": "webpack-dev-server --open",
+    "start:dev": "webpack-dev-server",
     "start:md": "cd data-md && npm run start",
     "copy-files": "cp -r data-md/fr/ dist-prod/ && mkdir dist-prod/indexes/ && cp data-md/fr-index.json dist-prod/indexes/fr-index.json"
   }
