@@ -43,8 +43,6 @@ export class RouterComponent extends router(navigator(outlet(LitElement))) {
     }
 
     render() {
-        console.log(getState());
-
         return html`
         <router-link href="/">hom</router-link>
         <router-link href="/test">test</router-link>

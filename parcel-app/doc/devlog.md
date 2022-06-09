@@ -92,6 +92,16 @@ Fixed favicon somewhat
 First impl of IndexedDB
 Second impl -- now with promises, but not really full, tho.
 
+# 2022-06-08
+DID THINGS CANT DO THAT NOW -- and now I don't remember.
+Judging fomr commits:
+Fixed some code
+Added proper fetching component for getting rules
+And began first shot at making events
+
+# 2022-06-09
+Changed how I handle state to make it async somewhat.
+
 # todo short term:
 ~~Add IndexEntries in indexedDB -- DONE~~ (need to do it better, but works good enough for now)
 Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such) -- on it

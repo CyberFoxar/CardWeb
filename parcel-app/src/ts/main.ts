@@ -1,4 +1,4 @@
-import { RuleIndex } from "./models/Index.model";
+import { Rule, RuleIndex } from "./models/Index.model";
 import { getState } from "./utils/AppState";
 
 import '../styles/styles.css';
@@ -18,8 +18,7 @@ async function main() {
     // loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
     // document.getElementById("8-americain")!.onclick = () => loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
     // document.getElementById("ascenceur")!.onclick = () => loadMarkdownFromUrl("http://localhost:8080/ascenceur.md");
-    loadIndex("/fr/fr-index.json");
-
+    await loadIndex("/fr/fr-index.json")
     // Snippet from: https://tailwindcss.com/docs/dark-mode
     // // On page load or when changing themes, best to add inline in `head` to avoid FOUC
     // if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -36,9 +35,13 @@ async function main() {
 
     var db = new IndexedDB();
     await db.openDB();
-    db.addRule(getState()!.currentIndex!.entries[0]);
-    var rule = await db.getRule(getState()!.currentIndex!.entries[0].id);
-    console.log(rule);
+    if((await getState()).currentIndex?.entries){
+        db.addRule((await getState())!.currentIndex!.entries[0]);
+        var rule = await db.getRule((await getState())!.currentIndex!.entries[0].id);
+        console.log(rule);
+    } else {
+        console.log("NO STATE ????", (await getState()).currentIndex);
+    }
     db.getAllRules().then(rules => {console.log('rules:', rules)})
 }
 
@@ -68,9 +71,14 @@ export function loadMarkdown(text: string) {
 }
 
 export async function loadIndex(url: string) {
+    console.log("loading Index");
     const response = await fetch(url);
     const text = await response.text();
-    const index = JSON.parse(text) as RuleIndex;
+    const index = RuleIndex.from(JSON.parse(text));
+    if(!index) {
+        console.error("Index is null");
+        return;
+    }
 
     const entryMenu = document.getElementById("indexEntries")!;
 
@@ -87,12 +95,9 @@ export async function loadIndex(url: string) {
     });
     // Save index somewhere I can use everywhere
     // console.log(response, text, index, getState());
-    getState().currentIndex = index;
-    getState().save();
-}
-
-export function saveToIndexedDb(url: string, text: string) {
-    // TODO
+    (await getState()).currentIndex = index;
+    (await getState()).save();
+    return Promise.resolve(index);
 }
 
 main();

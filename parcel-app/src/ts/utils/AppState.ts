@@ -1,15 +1,50 @@
-import { RuleIndex } from "../models/Index.model";
+import { Rule, RuleIndex } from "../models/Index.model";
+import { SubscribableEvent } from "./SubscribableEvent";
 
 export class State {
-    public currentIndex: RuleIndex | undefined;
 
-    constructor() { 
-        if(window.localStorage.getItem('cwAppState')) {
-            Object.assign(this, JSON.parse(window.localStorage.getItem('cwAppState')!));
+    public subEvent = new SubscribableEvent<String>();
+    private currentStateVersion = 1;
+
+    private _currentIndex: RuleIndex | null = null;
+    public get currentIndex(): RuleIndex | null {
+        return this._currentIndex;
+    }
+    public set currentIndex(value: RuleIndex | null) {
+        this._currentIndex = value;
+    }
+
+    constructor() {
+    }
+
+    private subscribeToEverything() {
+        if (this.currentIndex) {
+            this.currentIndex.subEvent.on((e) => {
+                this.subEvent.fire(e);
+            });
         }
-        else {
-            this.currentIndex = undefined;
-        }
+    }
+
+    // I want to import and export my state in a local storage friendly way
+
+    async load(): Promise<State> {
+        return new Promise((resolve, reject) => {
+            if (!window.localStorage.getItem('cwAppState')) {
+                reject(new Error("No state to load, creating blank state"));
+            }
+
+            // Assume we have a state, and try copying to properties we want into our own state
+            var state = JSON.parse(window.localStorage.getItem('cwAppState')!) as State;
+            if (this.currentStateVersion !== state.currentStateVersion) {
+                reject(new Error("State version mismatch, cannot load state"));
+            }
+
+            if (state.currentIndex) {
+                this.currentIndex = new RuleIndex(state.currentIndex.lang, state.currentIndex.entries);
+            }
+            this.subscribeToEverything();
+            resolve(this);
+        });
     }
 
     /**
@@ -20,9 +55,10 @@ export class State {
     }
 }
 
-export function getState() {
-    if(window.cwAppState === undefined) {
+export async function getState(): Promise<State> {
+    if (!window.cwAppState) {
         window.cwAppState = new State();
+        return window.cwAppState.load();
     }
     return window.cwAppState;
 }
