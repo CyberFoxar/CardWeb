@@ -8,7 +8,7 @@ import { getState } from '../../utils/AppState';
 import '../homepage/home';
 import '../markdown-vis/md-fetch';
 @customElement('router-outlet')
-export class RouterComponent extends router(navigator(outlet(LitElement))) {
+export class RouterComponent extends router(outlet(LitElement)) {
 
     private activeRoute: string | undefined;
     private params: any | undefined;
@@ -55,11 +55,6 @@ export class RouterComponent extends router(navigator(outlet(LitElement))) {
         </div>
     `;
 
-    }
-
-    linkClick(event: any) {
-        event.preventDefault();
-        this.navigate(event.target.href);
     }
 
     constructor() {

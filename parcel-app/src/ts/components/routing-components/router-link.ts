@@ -18,10 +18,10 @@ class RouterLinkComponent extends navigator(LitElement) {
     render() {
 
         return html`
-    <a href="${this.href}" @click="${this.linkClick}">
-        <slot></slot>
-    </a>
-  `;
+            <a href="${this.href}" @click="${this.linkClick}">
+                <slot></slot>
+            </a>
+        `;
 
     }
 
@@ -34,6 +34,6 @@ class RouterLinkComponent extends navigator(LitElement) {
 
 declare global {
     interface HTMLElementTagNameMap {
-      "router-link": RouterLinkComponent;
+        "router-link": RouterLinkComponent;
     }
 }

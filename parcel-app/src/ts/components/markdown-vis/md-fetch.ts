@@ -62,11 +62,12 @@ export class MarkdownFetchElement extends LitElement {
 
     }
 
-    fetchFile(ruleId: string) {
+    async fetchFile(ruleId: string) {
         this.loading = false;
         var loader = setTimeout(() => this.loading = true, 250);
+        var state = await getState();
 
-        if (!this.id || !getState().currentIndex) {
+        if (!this.id || !state.currentIndex) {
             console.warn("No id or no index to fetch from");
             clearTimeout(loader);
             this.loading = false;
@@ -74,7 +75,7 @@ export class MarkdownFetchElement extends LitElement {
             return;
         }
 
-        const ruleEntry = (getState().currentIndex)!.entries.find(entry => entry.id === ruleId);
+        const ruleEntry = (state.currentIndex)!.entries.find(entry => entry.id === ruleId);
         if(!ruleEntry) {
             console.warn(`No rule found for id ${ruleId}`);
             clearTimeout(loader);

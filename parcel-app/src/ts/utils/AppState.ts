@@ -12,13 +12,16 @@ export class State {
     }
     public set currentIndex(value: RuleIndex | null) {
         this._currentIndex = value;
+        this.subToIndexChanges();
+        this.subEvent.fire("index:set");
     }
 
     constructor() {
     }
 
-    private subscribeToEverything() {
+    private subToIndexChanges() {
         if (this.currentIndex) {
+            console.log("Subscribing to index changes");
             this.currentIndex.subEvent.on((e) => {
                 this.subEvent.fire(e);
             });
@@ -42,7 +45,8 @@ export class State {
             if (state.currentIndex) {
                 this.currentIndex = new RuleIndex(state.currentIndex.lang, state.currentIndex.entries);
             }
-            this.subscribeToEverything();
+            this.subToIndexChanges();
+            this.subEvent.fire("state:loaded");
             resolve(this);
         });
     }
