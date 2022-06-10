@@ -5,9 +5,12 @@ import { customElement, property } from 'lit/decorators.js';
 import { marked } from "marked";
 import * as yamlFront from "yaml-front-matter";
 import { MarkdownToc } from '../../MarkdownToc';
+import { styles } from '~src/styles/global-styles';
 
 @customElement('md-view')
 export class MarkdownViewElement extends LitElement {
+
+    static styles = [styles];
 
     @property()
     public markdownFileText: string | null = "";

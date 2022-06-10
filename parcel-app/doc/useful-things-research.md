@@ -52,3 +52,50 @@ It works. Somewhat. Styles do not seem to work outside of components, though.
 But, it didn't work, really. And would require more work than I'm willing to put to make it work.
 Sooo...
 We're removing tailwind.
+
+OR NOT LOL
+We're trying again, this time we encapsulate our whole app inside a component, hopefully this will solve some things.
+Let's try the first link, again.
+We're going to use `cssnano` `postcss-loader` `cssnano-preset-lit` `postcss-syntax` `@stylelint/postcss-css-in-js`
+We want to load the emitted JS from our typescript loader into postcss:
+```js
+  module: {
+    rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        use: [{
+          loader: "esbuild-loader",
+          options: {
+            loader: "ts",
+            target: "es2021",
+          },
+        },
+        'postcss-loader'],
+      },
+    ]
+  }
+```
+Then, we modify `postcss.config.js`
+```js
+module.exports = {
+  syntax: require('@stylelint/postcss-css-in-js'),
+  plugins: [
+    require('tailwindcss/nesting'),
+    require('tailwindcss'),
+    require('autoprefixer'),
+    require('cssnano')({
+      preset: require('cssnano-preset-lite')
+    })
+  ]
+}
+```
+
+And this should allow us to have a working css-in-js solution.
+Then, we need to modify our tailwind styles to actually work inside our components.
+This will require the use of a css template literal, and exporting the variable for our styles by encapsulating them inside:
+```ts
+// inside styles.ts
+import { css } from "lit";
+
+export const styles = css`...`
+```

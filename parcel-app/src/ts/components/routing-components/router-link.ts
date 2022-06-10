@@ -1,11 +1,14 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, css } from 'lit';
 
 import { customElement, property } from 'lit/decorators.js';
 import { navigator } from 'lit-element-router';
+import { styles } from '~src/styles/global-styles';
 
 
 @customElement('router-link')
 class RouterLinkComponent extends navigator(LitElement) {
+
+    static styles = [styles, css``]
 
     @property()
     public href: string;

@@ -27,17 +27,45 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('tailwindcss/nesting')(),
+                  require('tailwindcss')(),
+                  require('autoprefixer')(),
+                ]
+              }
+            }
+          },],
       },
       {
         test: /\.(ts|tsx)$/,
-        use: [{
-          loader: "esbuild-loader",
-          options: {
-            loader: "ts",
-            target: "es2021",
+        use: [
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                syntax: require('postcss-lit'),
+                plugins: [
+                  require('tailwindcss/nesting')(),
+                  require('tailwindcss')(),
+                  require('autoprefixer')(),
+                ]
+              }
+            }
           },
-        }],
+          {
+            loader: "esbuild-loader",
+            options: {
+              loader: "ts",
+              target: "es2021",
+            },
+          }],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
