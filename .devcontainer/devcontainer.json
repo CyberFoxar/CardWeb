@@ -18,7 +18,24 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"dbaeumer.vscode-eslint"
+		// Code-related
+		"bradlc.vscode-tailwindcss",
+		"ms-vscode.vscode-typescript-tslint-plugin",
+		"dbaeumer.vscode-eslint",
+		"GitHub.copilot",
+		// Version control
+		"mhutchie.git-graph",
+		"eamodio.gitlens",
+		// QoL
+		"k--kato.intellij-idea-keybindings",
+		"MariusAlchimavicius.json-to-ts",
+		"humao.rest-client",
+		// Markdown
+		"yzhang.markdown-all-in-one",
+		"mdickin.markdown-shortcuts",
+		"shd101wyy.markdown-preview-enhanced",
+		"darkriszty.markdown-table-prettify",
+		"DavidAnson.vscode-markdownlint",
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

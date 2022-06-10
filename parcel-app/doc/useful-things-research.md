@@ -24,9 +24,16 @@ Previous idea are:
 Current ( 2022-03-22 ) idea:
 Do not bundle anything / bundle as little as possible.
 Have all the .md available ~somewhere~ on the server as cleartext / not obsfucated
-Have a digest/meta of all files made
+Have a digest/meta of all files made (index.json, currently)
 Each time a file is requested, cache the contents (or don't if client does not wishes it).
 Have an option to cache everything from a given lang.
 
 ## Why bundling files in the dist ?
 Not having multiple app running is a plus for me, even if running with `file://` is not an option for a local distrib, running just the thing locally would be trivial if it's just a bunch of js/html/json. That would also (probably) allow me to serve it from virtually anything that lets me upload HTML/JS/CSS+Assets.
+
+## bundler ?
+I began with parcel. All was well until I had to dig in to handle complex stuff, like postCSS and tailwind. Then, parcel's code-splitting broke my static code, because their implementation as of 2022-06-04 is not up to spec and they do not respect `static` keyword, thus breaking a fundamental part of my app and requiering ugly workarounds.
+
+So i've elected to change. But what to choose ?
+Lit has a default implementation using rollup, but webpack is more widerly used/available.
+I elected to go with webpack, it's got a load of resources and support, it's highly configurable and it work with what I want.

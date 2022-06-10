@@ -21,11 +21,6 @@ export class MarkdownToc {
     }
 
     public addTocItem(url: string, text: string, depth: number) {
-        // TODO:
-        // - check if url is already in toc, and add a '-x' to the end of the url if so
-        // /!\ very specific to how marked works and sluggify things.
-        // We might be able to fix that by calling marked's lexer better.
-
         const itemToAdd = new TocItem(url, text, depth, null);
         // console.debug("Adding: ", itemToAdd, `to TOC `, this.toc, " with current item: ", this.currentTocItem);
 
@@ -81,7 +76,7 @@ class TocItem {
 
     public addSibling(item: TocItem) {
         // Add a sibling
-        console.debug("Adding sibling: ", item, " to me: ", this);
+        // console.debug("Adding sibling: ", item, " to me: ", this);
         if (!this.parent) {
             throw new Error(`No parent for this item: ${this.text}`);
         }
@@ -91,7 +86,7 @@ class TocItem {
 
     public addChild(item: TocItem) {
         // Add a child
-        console.debug("Adding child: ", item, " to me: ", this);
+        // console.debug("Adding child: ", item, " to me: ", this);
         this.children.push(item);
         item.parent = this;
     }

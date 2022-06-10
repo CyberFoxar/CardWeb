@@ -1,0 +1,18 @@
+{
+  "name": "data-md",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build-data.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc-watch --target es2021 --module commonjs ./src/build-data.ts --outDir ./dist/ --onSuccess \"node ./dist/build-data.js\"",
+    "build": "tsc ./src/build-data.ts --target es2021 --module commonjs --outDir ./dist/ && node ./dist/build-data.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tsc-watch": "^5.0.3",
+    "typescript": "^4.7.2",
+    "yaml-front-matter": "^4.1.1"
+  }
+}

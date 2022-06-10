@@ -4,12 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./styles/styles.css" />
-    <title>My First Parcel App</title>
+    <title>CardWeb AWR</title>
 </head>
 
 <body>
-    <div class="flex flex-columns">
+    <div class="flex flex-columns flex-auto">
         <!-- Page -->
         <div class="fixed top-2 left-2 z-50 lg:hidden">
             <!-- Burger -->
@@ -21,25 +20,25 @@
         <nav class="cw-sidebar pl-4
         fixed left invisible dark:bg-gray-700/100 z-40 ml-auto
         lg:max-w-xs lg:relative lg:flex-initial lg:bg-inherit lg:z-auto lg:visible">
-        <!-- Above, everything is mobile first then lg breakpoint for bigger screens. -->
-            <a class="no-underline text-pink-200">CardWeb</a>
+            <!-- Above, everything is mobile first then lg breakpoint for bigger screens. -->
+            <router-link href="/" class="no-underline"><a class="no-underline text-pink-200">CardWeb</a></router-link>
             <div id="indexEntries">
                 <!-- To be replaced by a search bar of some sort -->
                 <!-- Where the available documents are -->
                 <!-- Temp placement move into sidebar -->
             </div>
+
+            <router-link href="/test">test</router-link>
+
             <div id="generated-menu" class="generated-menu">
-                <!-- Where the document explorer goes -->
+                <!-- Where the document explorer / TOC goes -->
             </div>
         </nav>
 
-        <div id="container" class="flex-auto basis-4/5 prose dark:prose-invert m-4 md:mr-auto">
-            <!-- Where Markdown and content lives -->
+        <div id="container" class="flex-auto flex-wrap basis-4/5 m-4 md:mr-auto">
+            <router-outlet></router-outlet>
         </div>
-
     </div>
-
-    <script src="./ts/main.ts" type="module"></script>
 </body>
 
 </html>

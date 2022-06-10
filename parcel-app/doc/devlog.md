@@ -67,8 +67,57 @@ Currently investigating how I'll handle absolutly different pages for my stuff.
 And few of those things are very different beasts, and should be compartimentalized.
 So I found [lit](https://lit.dev/) which is a very lightweight web component library. I might use it, but I need to understand how everything will mesh with everything else. branch time ?
 
+# 2022-04-20 
+(date a peu près)\
+Bricolages avec Lit. Déplacé des trucs ailleurs.
+Prochaine étape: mettre un routeur pour afficher selectivement des composant en fonction de où on est sur le site.
+Had to do some magic to use markdown anchors, but I've managed to keep the custom in its own little component.
 
-# Todo:
+# 2022-05-16
+did ~things~, but unsure what. Done lots of research on webpack/parcel/rollup I guess
+
+# 2022-06-04
+ENFIN implémenté webpack proprement:
+- webserver correct
+- tailwind + postCSS
+- lit qui fonctionne
+et d'autres trucs. Voir [ce document](./webpackinstall.md).
+
+Au passage, j'ai corrigé le composant markdown, plus besoin de casser le shadow-dom pour faire les ancres, ça fonctionne semi-tout seul. Je dois quand même aller fouiller dans les shadow-dom pour lui donner le menu a remplir mais ça avance.
+J'ai un local storage rudimentaire mais qui fonctionne et se rappelle de trucs. C'est pas mal.
+J'ai aussi mis ma génération d'index dans son mini-projet a part.
+
+# 2022-06-07
+Fixed favicon somewhat
+First impl of IndexedDB
+Second impl -- now with promises, but not really full, tho.
+
+# 2022-06-08
+DID THINGS CANT DO THAT NOW -- and now I don't remember.
+Judging fomr commits:
+Fixed some code
+Added proper fetching component for getting rules
+And began first shot at making events
+
+# 2022-06-09
+Changed how I handle state to make it async somewhat.
+I fixed it somehow by not choosing yet.
+
+# 2022-06-10
+HERE WE REMOVE TAILWIND DAMMIT.
+
+
+# todo short term:
+~~Add IndexEntries in indexedDB -- DONE~~ (need to do it better, but works good enough for now)
+Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such) -- on it
+Add better way to update TOC, maybe using events ?
+  Like, when a document is "finished processing" you send an event to a lot of listeners with the new MarkdownTOC, would be better than replacing HTML inside divs, esp. for sidebar content.
+Add index entries link into homepage (so I can finally remove them from sidebar)
+~~Add fucking favicon (favicon made, but not implemented) DONE~~
+
+Merge into develop, fix CI/CD
+
+# Todo long term:
 See [Reseach](useful-things-research.md).
 
 - Definir un format de données ✅
