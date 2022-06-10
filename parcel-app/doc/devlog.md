@@ -101,6 +101,11 @@ And began first shot at making events
 
 # 2022-06-09
 Changed how I handle state to make it async somewhat.
+I fixed it somehow by not choosing yet.
+
+# 2022-06-10
+HERE WE REMOVE TAILWIND DAMMIT.
+
 
 # todo short term:
 ~~Add IndexEntries in indexedDB -- DONE~~ (need to do it better, but works good enough for now)
