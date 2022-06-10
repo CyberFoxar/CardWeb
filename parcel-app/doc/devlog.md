@@ -105,17 +105,20 @@ I fixed it somehow by not choosing yet.
 
 # 2022-06-10
 HERE WE REMOVE TAILWIND DAMMIT.
-
+And we didn't, kek.
+We made it work with our components. WE MADE IT WORK.
+And we also added an entry point component, because we need one.
+And then fixed all the styles to get back to where we were.
 
 # todo short term:
 ~~Add IndexEntries in indexedDB -- DONE~~ (need to do it better, but works good enough for now)
-Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such) -- on it
+~~Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such) -- on it~~ -- done, sorta
 Add better way to update TOC, maybe using events ?
   Like, when a document is "finished processing" you send an event to a lot of listeners with the new MarkdownTOC, would be better than replacing HTML inside divs, esp. for sidebar content.
-Add index entries link into homepage (so I can finally remove them from sidebar)
+~~Add index entries link into homepage (so I can finally remove them from sidebar)~~ done, but ugly
 ~~Add fucking favicon (favicon made, but not implemented) DONE~~
 
-Merge into develop, fix CI/CD
+Merge into master, fix CI/CD
 
 # Todo long term:
 See [Reseach](useful-things-research.md).

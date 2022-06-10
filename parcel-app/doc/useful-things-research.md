@@ -38,7 +38,7 @@ So i've elected to change. But what to choose ?
 Lit has a default implementation using rollup, but webpack is more widerly used/available.
 I elected to go with webpack, it's got a load of resources and support, it's highly configurable and it work with what I want.
 
-## Tailwind, lit, and the shadow of ~~man~~ dom
+# Tailwind, lit, and the shadow of ~~man~~ dom
 So.
 Tailwind is great and all, but shadow dom is, well, a shadow. It doesn't cascade styles, or anything else like that.
 Removing the shadow dom is a can of worms, as it might (and by might I mean break) our router, and I don't want to change my router lib or do it myself.
@@ -99,3 +99,9 @@ import { css } from "lit";
 
 export const styles = css`...`
 ```
+
+Though if we're doing that, we might as well use `postcss-lit` and save ourselves the hassle.
+
+# Markdown parsing
+`Marked` is a big chonky boy, if I want to shave some kb I could try to learn to use `unified` and `remark`, and even replace `yaml-front-matter` with `remark-frontmatter`.
+All in all, I could probably /3 or /2 the vendor size.

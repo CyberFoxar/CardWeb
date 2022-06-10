@@ -3,6 +3,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { customElement, property } from 'lit/decorators.js';
 
 import { marked } from "marked";
+// TODO: is front-matter really useful here ?
 import * as yamlFront from "yaml-front-matter";
 import { MarkdownToc } from '../../MarkdownToc';
 import { styles } from '~src/styles/global-styles';
