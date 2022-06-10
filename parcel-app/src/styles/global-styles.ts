@@ -25,13 +25,4 @@ export const styles = css`
       }
     }
   }
-
-  @layer components { 
-    .generated-menu a {
-        @apply text-pink-600 hover:text-pink-400 no-underline;
-    }
-    .generated-menu li {
-        @apply ml-2 mt-1;
-    }
-  }
 `;

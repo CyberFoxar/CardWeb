@@ -1,3 +1,4 @@
+import { MarkdownToc } from "../MarkdownToc";
 import { Rule, RuleIndex } from "../models/Index.model";
 import { SubscribableEvent } from "./SubscribableEvent";
 
@@ -14,6 +15,15 @@ export class State {
         this._currentIndex = value;
         this.subToIndexChanges();
         this.subEvent.fire("index:set");
+    }
+
+    private _currentTOC = new MarkdownToc();
+    public get currentTOC() {
+        return this._currentTOC;
+    }
+    public set currentTOC(value) {
+        this._currentTOC = value;
+        this.subEvent.fire("toc:set");
     }
 
     constructor() {

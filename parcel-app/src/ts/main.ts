@@ -3,6 +3,7 @@ import { getState } from "./utils/AppState";
 
 import "./components/routing-components/router-link";
 import "./components/routing-components/router";
+import "~components/markdown-vis/tocSidebar";
 import { IndexedDB } from "./utils/IndexedDB";
 import { customElement, query } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
@@ -54,9 +55,7 @@ export class App extends LitElement {
         
                     <router-link href="/test">test</router-link>
         
-                    <div id="generated-menu" class="generated-menu">
-                        <!-- Where the document explorer / TOC goes -->
-                    </div>
+                    <cw-toc-sidebar></cw-toc-sidebar>
                 </nav>
         
                 <div id="container" class="flex-auto flex-wrap basis-4/5 m-4 md:mr-auto h-fit">
