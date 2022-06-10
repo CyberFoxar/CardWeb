@@ -37,3 +37,18 @@ I began with parcel. All was well until I had to dig in to handle complex stuff,
 So i've elected to change. But what to choose ?
 Lit has a default implementation using rollup, but webpack is more widerly used/available.
 I elected to go with webpack, it's got a load of resources and support, it's highly configurable and it work with what I want.
+
+## Tailwind, lit, and the shadow of ~~man~~ dom
+So.
+Tailwind is great and all, but shadow dom is, well, a shadow. It doesn't cascade styles, or anything else like that.
+Removing the shadow dom is a can of worms, as it might (and by might I mean break) our router, and I don't want to change my router lib or do it myself.
+So, tailwind has a problem, it needs to read CSS using postCSS, however, it also needs to encapsulate its styles in CSS template literals, sometimes. The issue with that, is that I'm a fucking pig which has a ton of annoying code and legacy stuff. 
+I could probably makje tailwind work with lit. Maybe. Those guys did:
+https://dev.to/43081j/using-tailwind-at-build-time-with-web-components-1bhm
+https://dev.to/43081j/using-tailwind-postcss-and-stylelint-with-lit-element-projects-2hb9
+
+But their methods are annoying, look brittle, and depends on stuff I don't feel like doing. I'll try the first guy's method, for kicks.
+It works. Somewhat. Styles do not seem to work outside of components, though.
+But, it didn't work, really. And would require more work than I'm willing to put to make it work.
+Sooo...
+We're removing tailwind.
