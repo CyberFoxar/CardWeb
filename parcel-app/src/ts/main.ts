@@ -3,10 +3,10 @@ import { getState } from "./utils/AppState";
 
 import "./components/routing-components/router-link";
 import "./components/routing-components/router";
-import { queryShadow } from "./utils/ShadowDomUtils";
+import { queryShadow, queryShadowClass } from "./utils/ShadowDomUtils";
 import { MarkdownViewElement } from "./components/markdown-vis/md-view";
 import { IndexedDB } from "./utils/IndexedDB";
-import { customElement } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
 import { styles } from "~src/styles/global-styles";
 
@@ -15,7 +15,7 @@ export class App extends LitElement {
     static styles = [styles,
         css`
         :host, cw-app, .cw-app {
-            height: 100vh;
+            min-height: 100vh;
         }
     `];
 
@@ -24,22 +24,30 @@ export class App extends LitElement {
         main();
     }
 
+    toggleSidebar(e: Event) {
+        this.sidebar.classList.toggle("invisible");
+    }
+
+    @query('.cw-sidebar')
+    sidebar!: HTMLElement;
+
     protected render(): unknown {
         return html`
-        <div class="cw-app">
-            <div class="flex flex-columns flex-auto">
+        <div class="font-sans object-fill cw-app h-fit">
+            <div class="flex flex-columns flex-auto pt-4 h-fit lg:pt-0">
                 <!-- Page -->
                 <div class="fixed top-2 left-2 z-50 lg:hidden">
                     <!-- Burger -->
-                    <button class="cw-burger">
+                    <button class="cw-burger" @click=${this.toggleSidebar}>
                         🍔
                     </button>
                 </div>
         
                 <nav
-                    class="cw-sidebar pl-4 fixed left invisible dark:bg-gray-700/100 z-40 ml-auto lg:max-w-xs lg:relative lg:flex-initial lg:bg-inherit lg:z-auto lg:visible">
+                    class="cw-sidebar pl-8 p-2 fixed left top-0 invisible  z-40 ml-auto 
+                    lg:pl-4 lg:pt-2 lg:pr-0 lg:max-w-xs lg:relative lg:flex-initial lg:bg-inherit lg:z-auto lg:visible">
                     <!-- Above, everything is mobile first then lg breakpoint for bigger screens. -->
-                    <router-link href="/" class="no-underline"><a class="no-underline text-pink-200">CardWeb</a></router-link>
+                    <router-link href="/" class="no-underline"><p class="no-underline text-pink-200">CardWeb</p></router-link>
                     <div id="indexEntries">
                         <!-- To be replaced by a search bar of some sort -->
                         <!-- Where the available documents are -->
@@ -53,7 +61,7 @@ export class App extends LitElement {
                     </div>
                 </nav>
         
-                <div id="container" class="flex-auto flex-wrap basis-4/5 m-4 md:mr-auto">
+                <div id="container" class="flex-auto flex-wrap basis-4/5 m-4 md:mr-auto h-fit">
                     <router-outlet></router-outlet>
                 </div>
             </div>
@@ -88,10 +96,6 @@ async function main() {
     // }
     document.documentElement.classList.add('dark');
 
-    const burgerToggles = document.querySelectorAll(".cw-burger");
-    burgerToggles.forEach(element => {
-        element.addEventListener("click", toggleSidebar);
-    });
 
     var db = new IndexedDB();
     await db.openDB();
@@ -103,13 +107,6 @@ async function main() {
         console.log("NO STATE ????", (await getState()).currentIndex);
     }
     db.getAllRules().then(rules => { console.log('rules:', rules); });
-}
-
-function toggleSidebar() {
-    const sidebarElements = document.querySelectorAll(".cw-sidebar");
-    sidebarElements.forEach(element => {
-        element.classList.toggle("invisible");
-    });
 }
 
 export async function loadMarkdownFromUrl(url: string) {
@@ -140,24 +137,25 @@ export async function loadIndex(url: string) {
         return;
     }
 
-    const entryMenu = document.getElementById("indexEntries")!;
+    // const entryMenu = document.getElementById("indexEntries")!;
+    const entryMenu = queryShadowClass(['cw-app'], '#id');
 
-    index.entries.forEach(entry => {
-        const entryElement = document.createElement("button");
-        entryElement.innerHTML = entry.id;
-        // Load content directly
-        // entryElement.addEventListener("click", () => loadMarkdown(index.entries.find(e => e.id === entry.id)!.content));
-
-        // Load content from url
-        entryElement.addEventListener("click", () => loadMarkdownFromUrl(markdownDocumentsUrl + entry.location));
-
-        entryMenu.appendChild(entryElement);
-    });
+    if(entryMenu){
+        index.entries.forEach(entry => {
+            const entryElement = document.createElement("button");
+            entryElement.innerHTML = entry.id;
+            // Load content directly
+            // entryElement.addEventListener("click", () => loadMarkdown(index.entries.find(e => e.id === entry.id)!.content));
+    
+            // Load content from url
+            entryElement.addEventListener("click", () => loadMarkdownFromUrl(markdownDocumentsUrl + entry.location));
+    
+            entryMenu.appendChild(entryElement);
+        });
+    }
     // Save index somewhere I can use everywhere
     // console.log(response, text, index, getState());
     (await getState()).currentIndex = index;
     (await getState()).save();
     return Promise.resolve(index);
 }
-
-main();

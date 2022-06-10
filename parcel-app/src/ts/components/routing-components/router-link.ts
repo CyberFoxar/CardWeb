@@ -21,7 +21,7 @@ class RouterLinkComponent extends navigator(LitElement) {
     render() {
 
         return html`
-            <a href="${this.href}" @click="${this.linkClick}">
+            <a href="${this.href}" @click="${this.linkClick}" class="no-underline">
                 <slot></slot>
             </a>
         `;
