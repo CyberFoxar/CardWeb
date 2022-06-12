@@ -61,9 +61,9 @@ function main() {
   const distpath = path.resolve(__dirname, distDir, filename);
   fs.writeFileSync(dirpath, JSON.stringify(index, null, 2));
 
-  // Copy file to dist
-  fs.copyFileSync(dirpath, distpath);
-  console.log(`Done writing at ${distpath}`);
+  // // Copy file to dist
+  // fs.copyFileSync(dirpath, distpath);
+  console.log(`Done writing at ${dirpath}`);
 
   if(copy) {
     copyFilesToFinalDist();
@@ -77,11 +77,7 @@ function copyFilesToFinalDist() {
   files.forEach(file => {
     const filename = path.basename(file);
     const destFilePath = path.resolve(destPath, filename);
-    fs.mkdir(destPath, { recursive: true }, (err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
+    fs.mkdirSync(destPath, { recursive: true });
     fs.copyFileSync(file, destFilePath);
   });
   console.log(`Done copying files to ${destPath}`);
