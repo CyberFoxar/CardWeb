@@ -5,11 +5,15 @@ import * as yamlFront from "yaml-front-matter";
 // @ts-ignore -- importing using typescript does not work for some reason
 // const fm = require('front-matter');
 
-const dir = './fr/';
+const dir = '../fr/';
 const distDir = '../dist/';
+const finaldir = '../../dist/fr/';
 // Use glob ?
 // Use copyfiles ?
 // Use something else ?
+const copy = true;
+
+const truedir = path.resolve(__dirname, dir);
 
 function main() {
   // Read all MD in one folder
@@ -18,21 +22,8 @@ function main() {
   // Export index in /dist
   // Do it again for each language
 
-  function getFiles(dir, files_ = []) {
-    files_ = files_ || [];
-    var files = fs.readdirSync(dir);
-    for (var i in files) {
-      var name = dir + '/' + files[i];
-      if (fs.statSync(name).isDirectory()) {
-        getFiles(name, files_);
-      } else {
-        files_.push(name);
-      }
-    }
-    return files_;
-  }
-
-  const fileNames = getFiles(dir);
+  console.log(truedir, getFiles(truedir));
+  const fileNames = getFiles(truedir);
 
   const index = new Index('fr', []);
 
@@ -50,11 +41,11 @@ function main() {
       const playtime = parseRange(parsed.playtime);
       const id = encodeURI(parsed.title.toLowerCase().replace(/\s/g, '-'));
       const entry = new IndexEntry(
-        parsed.tags, 
-        id, 
-        playercount, 
-        parsed.complexity, 
-        playtime, 
+        parsed.tags,
+        id,
+        playercount,
+        parsed.complexity,
+        playtime,
         lastEdit,
         encodeURI(fullFilename),
         parsed.__content);
@@ -66,15 +57,45 @@ function main() {
   console.log("Index built ! Writing to disk...");
 
   const filename = index.lang + '-index.json';
-  const dirpath = path.resolve(dir, filename);
+  const dirpath = path.resolve(truedir, filename);
   const distpath = path.resolve(__dirname, distDir, filename);
   fs.writeFileSync(dirpath, JSON.stringify(index, null, 2));
 
-  // Copy file to dist
-  fs.copyFileSync(dirpath, distpath);
+  // // Copy file to dist
+  // fs.copyFileSync(dirpath, distpath);
+  console.log(`Done writing at ${dirpath}`);
 
-  console.log(getFiles(dir));
-  console.log(`Done writing at ${distpath}`);
+  if(copy) {
+    copyFilesToFinalDist();
+  }
+}
+
+function copyFilesToFinalDist() {
+  const files = getFiles(truedir);
+  const destPath = path.resolve(__dirname, finaldir);
+  console.log(`Copying files`, files , `to ${destPath}`);
+  files.forEach(file => {
+    const filename = path.basename(file);
+    const destFilePath = path.resolve(destPath, filename);
+    fs.mkdirSync(destPath, { recursive: true });
+    fs.copyFileSync(file, destFilePath);
+  });
+  console.log(`Done copying files to ${destPath}`);
+}
+
+
+function getFiles(dir, files_ = []) {
+  files_ = files_ || [];
+  var files = fs.readdirSync(dir);
+  for (var i in files) {
+    var name = dir + '/' + files[i];
+    if (fs.statSync(name).isDirectory()) {
+      getFiles(name, files_);
+    } else {
+      files_.push(path.resolve(__dirname, name));
+    }
+  }
+  return files_;
 }
 
 /**
@@ -82,7 +103,7 @@ function main() {
  * @param range undefined, empty, or of formats: '1-3', '5+', '5-', '5'
  * @returns an object with the range, might be null if nothing was parsed
  */
-function parseRange(range: string|number): { min: number, max: number; } {
+function parseRange(range: string | number): { min: number, max: number; } {
   if (!range || range.toString().length === 0) {
     // range does not exist or is empty string
     return { min: null, max: null };
