@@ -21,9 +21,9 @@ pipeline:
       - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
       - echo "$SSH_KEY" > ~/.ssh/id_rsa
       - ls -lah parcel-app
-      - ls -lah parcel-app/dist-prod
+      - ls -lah parcel-app/dist
       - chmod 600 ~/.ssh/id_rsa
-      - scp -P $SSH_PORT -r parcel-app/dist-prod/* $SSH_USER@$SSH_HOST:/sites/cardweb/
+      - scp -P $SSH_PORT -r parcel-app/dist/* $SSH_USER@$SSH_HOST:/sites/cardweb/
     #      - ssh ${SSH_USER}:$SSH_HOST 'chmod 700 ~/app/app.sh'
     #      - ssh ${SSH_USER}:$SSH_HOST 'cd ~/app && ./app.sh --file docker-compose-staging.yml up'
     #      - ssh ${SSH_USER}:$SSH_HOST 'cd ~/app && ./app.sh --file docker-compose-staging.yml update

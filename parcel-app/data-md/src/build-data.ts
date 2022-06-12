@@ -5,13 +5,15 @@ import * as yamlFront from "yaml-front-matter";
 // @ts-ignore -- importing using typescript does not work for some reason
 // const fm = require('front-matter');
 
-const dir = './fr/';
+const dir = '../fr/';
 const distDir = '../dist/';
-const finalDist = '../../dist/';
+const finaldir = '../../dist/fr/';
 // Use glob ?
 // Use copyfiles ?
 // Use something else ?
 const copy = true;
+
+const truedir = path.resolve(__dirname, dir);
 
 function main() {
   // Read all MD in one folder
@@ -20,7 +22,8 @@ function main() {
   // Export index in /dist
   // Do it again for each language
 
-  const fileNames = getFiles(dir);
+  console.log(truedir, getFiles(truedir));
+  const fileNames = getFiles(truedir);
 
   const index = new Index('fr', []);
 
@@ -54,25 +57,23 @@ function main() {
   console.log("Index built ! Writing to disk...");
 
   const filename = index.lang + '-index.json';
-  const dirpath = path.resolve(dir, filename);
+  const dirpath = path.resolve(truedir, filename);
   const distpath = path.resolve(__dirname, distDir, filename);
   fs.writeFileSync(dirpath, JSON.stringify(index, null, 2));
 
   // Copy file to dist
   fs.copyFileSync(dirpath, distpath);
-
-  console.log(getFiles(dir));
   console.log(`Done writing at ${distpath}`);
 
   if(copy) {
-    console.log(`Copying files to ${path.resolve(__dirname, finalDist, dir)}`);
+    console.log(`Copying files to ${path.resolve(__dirname, finaldir)}`);
     copyFilesToFinalDist();
   }
 }
 
 function copyFilesToFinalDist() {
-  const files = getFiles(dir);
-  const destPath = path.resolve(__dirname, finalDist, dir);
+  const files = getFiles(truedir);
+  const destPath = path.resolve(__dirname, finaldir);
   files.forEach(file => {
     const filename = path.basename(file);
     const destFilePath = path.resolve(destPath, filename);
@@ -95,7 +96,7 @@ function getFiles(dir, files_ = []) {
     if (fs.statSync(name).isDirectory()) {
       getFiles(name, files_);
     } else {
-      files_.push(name);
+      files_.push(path.resolve(__dirname, name));
     }
   }
   return files_;
