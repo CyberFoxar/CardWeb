@@ -1,4 +1,4 @@
-branches: [master, ci/*]
+branches: [master]
 pipeline:
   build:
     image: node:17
