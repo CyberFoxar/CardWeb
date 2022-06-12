@@ -11,7 +11,7 @@ module.exports = {
     clean: true,
     publicPath: '/'
   },
-  devtool: 'source-map',
+  devtool: 'eval-cheap-source-map',
   devServer: {
     historyApiFallback: true,
     static: [
