@@ -7,9 +7,11 @@ import * as yamlFront from "yaml-front-matter";
 
 const dir = './fr/';
 const distDir = '../dist/';
+const finalDist = '../../dist/';
 // Use glob ?
 // Use copyfiles ?
 // Use something else ?
+const copy = true;
 
 function main() {
   // Read all MD in one folder
@@ -17,20 +19,6 @@ function main() {
   // - use frontmatter to handle metadata
   // Export index in /dist
   // Do it again for each language
-
-  function getFiles(dir, files_ = []) {
-    files_ = files_ || [];
-    var files = fs.readdirSync(dir);
-    for (var i in files) {
-      var name = dir + '/' + files[i];
-      if (fs.statSync(name).isDirectory()) {
-        getFiles(name, files_);
-      } else {
-        files_.push(name);
-      }
-    }
-    return files_;
-  }
 
   const fileNames = getFiles(dir);
 
@@ -50,11 +38,11 @@ function main() {
       const playtime = parseRange(parsed.playtime);
       const id = encodeURI(parsed.title.toLowerCase().replace(/\s/g, '-'));
       const entry = new IndexEntry(
-        parsed.tags, 
-        id, 
-        playercount, 
-        parsed.complexity, 
-        playtime, 
+        parsed.tags,
+        id,
+        playercount,
+        parsed.complexity,
+        playtime,
         lastEdit,
         encodeURI(fullFilename),
         parsed.__content);
@@ -75,6 +63,42 @@ function main() {
 
   console.log(getFiles(dir));
   console.log(`Done writing at ${distpath}`);
+
+  if(copy) {
+    console.log(`Copying files to ${path.resolve(__dirname, finalDist, dir)}`);
+    copyFilesToFinalDist();
+  }
+}
+
+function copyFilesToFinalDist() {
+  const files = getFiles(dir);
+  const destPath = path.resolve(__dirname, finalDist, dir);
+  files.forEach(file => {
+    const filename = path.basename(file);
+    const destFilePath = path.resolve(destPath, filename);
+    fs.mkdir(destPath, { recursive: true }, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+    fs.copyFileSync(file, destFilePath);
+  });
+  console.log(`Done copying files to ${destPath}`);
+}
+
+
+function getFiles(dir, files_ = []) {
+  files_ = files_ || [];
+  var files = fs.readdirSync(dir);
+  for (var i in files) {
+    var name = dir + '/' + files[i];
+    if (fs.statSync(name).isDirectory()) {
+      getFiles(name, files_);
+    } else {
+      files_.push(name);
+    }
+  }
+  return files_;
 }
 
 /**
@@ -82,7 +106,7 @@ function main() {
  * @param range undefined, empty, or of formats: '1-3', '5+', '5-', '5'
  * @returns an object with the range, might be null if nothing was parsed
  */
-function parseRange(range: string|number): { min: number, max: number; } {
+function parseRange(range: string | number): { min: number, max: number; } {
   if (!range || range.toString().length === 0) {
     // range does not exist or is empty string
     return { min: null, max: null };

@@ -1,13 +1,12 @@
-branches: [master]
+branches: [master, ci/*]
 pipeline:
   build:
     image: node:17
     commands:
       - cd parcel-app/
       - yarn
-      - yarn run build
-      - yarn run build-indexes
-      - yarn run copy-files
+      - yarn build
+      - yarn build:md
   deploy:
     image: alpine:3.15
     environment:
