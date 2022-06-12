@@ -1,5 +1,5 @@
 import { MarkdownToc } from "../MarkdownToc";
-import { Rule, RuleIndex } from "../models/Index.model";
+import { RuleIndex } from "../models/Index.model";
 import { SubscribableEvent } from "./SubscribableEvent";
 
 export class State {
@@ -39,25 +39,54 @@ export class State {
     }
 
     // I want to import and export my state in a local storage friendly way
-
     async load(): Promise<State> {
-        return new Promise((resolve, reject) => {
+        try {
+            console.log("Loading state");
+
             if (!window.localStorage.getItem('cwAppState')) {
-                reject(new Error("No state to load, creating blank state"));
+                throw (new Error("No state to load, creating blank state"));
             }
 
             // Assume we have a state, and try copying to properties we want into our own state
             var state = JSON.parse(window.localStorage.getItem('cwAppState')!) as State;
             if (this.currentStateVersion !== state.currentStateVersion) {
-                reject(new Error("State version mismatch, cannot load state"));
+                throw (new Error("State version mismatch, cannot load state"));
             }
 
             if (state.currentIndex) {
                 this.currentIndex = new RuleIndex(state.currentIndex.lang, state.currentIndex.entries);
+            } else {
+                var index = await this.loadIndex("/fr/fr-index.json");
+                this.currentIndex = index;
             }
+
             this.subToIndexChanges();
             this.subEvent.fire("state:loaded");
-            resolve(this);
+            console.log("Loaded state", this);
+            return Promise.resolve(this);
+        }
+        catch (error) {
+            return Promise.reject(error);
+        }
+    }
+
+    async loadIndex(url: string): Promise<RuleIndex> {
+        return new Promise(async (resolve, reject) => {
+            var index: RuleIndex | null;
+            try {
+                console.log("loading Index");
+                const response = await fetch(url);
+                const text = await response.text();
+                index = RuleIndex.from(JSON.parse(text));
+                if (!index) {
+                    throw ("Index is null");
+                }
+            } catch (error) {
+                reject(`Error while fetching index: ${error}`);
+            }
+
+            console.log("Loaded index", index!);
+            resolve(index!);
         });
     }
 
@@ -71,14 +100,14 @@ export class State {
 
 export async function getState(): Promise<State> {
     if (!window.cwAppState) {
-        window.cwAppState = new State();
-        return window.cwAppState.load();
+        const state = new State();
+        window.cwAppState = state.load();
     }
     return window.cwAppState;
 }
 
 declare global {
     interface Window {
-        cwAppState: State;
+        cwAppState: Promise<State>;
     }
 }

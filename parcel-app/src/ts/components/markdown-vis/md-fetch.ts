@@ -68,7 +68,7 @@ export class MarkdownFetchElement extends LitElement {
         var state = await getState();
 
         if (!this.id || !state.currentIndex) {
-            console.warn("No id or no index to fetch from");
+            console.warn("No id or no index to fetch from", this.id, state.currentIndex);
             clearTimeout(loader);
             this.loading = false;
             this.currentLoadedRuleText = '';

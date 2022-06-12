@@ -44,9 +44,11 @@ export class App extends LitElement {
         
                 <nav
                     class="cw-sidebar pl-8 p-2 fixed left top-0 invisible bg-gray-600 z-40 ml-auto 
-                    lg:pl-4 lg:pt-2 lg:pr-0 lg:max-w-xs lg:relative lg:flex-initial lg:bg-inherit lg:z-auto lg:visible">
+                            lg:pl-4 lg:pt-2 lg:pr-0 lg:max-w-xs lg:relative lg:flex-initial lg:bg-inherit lg:z-auto lg:visible">
                     <!-- Above, everything is mobile first then lg breakpoint for bigger screens. -->
-                    <router-link href="/" class="no-underline"><p class="no-underline text-pink-200">CardWeb</p></router-link>
+                    <router-link href="/" class="no-underline">
+                        <p class="no-underline text-pink-200">CardWeb</p>
+                    </router-link>
                     <div id="indexEntries">
                         <!-- To be replaced by a search bar of some sort -->
                         <!-- Where the available documents are -->
@@ -74,7 +76,7 @@ async function main() {
     // loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
     // document.getElementById("8-americain")!.onclick = () => loadMarkdownFromUrl("http://localhost:8080/8-americain.md");
     // document.getElementById("ascenceur")!.onclick = () => loadMarkdownFromUrl("http://localhost:8080/ascenceur.md");
-    await loadIndex("/fr/fr-index.json");
+    // await loadIndex("/fr/fr-index.json");
     // Snippet from: https://tailwindcss.com/docs/dark-mode
     // // On page load or when changing themes, best to add inline in `head` to avoid FOUC
     // if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -87,30 +89,16 @@ async function main() {
 
     var db = new IndexedDB();
     await db.openDB();
-    if ((await getState()).currentIndex?.entries) {
-        db.addRule((await getState())!.currentIndex!.entries[0]);
-        var rule = await db.getRule((await getState())!.currentIndex!.entries[0].id);
-        console.log(rule);
-    } else {
-        console.log("NO STATE ????", (await getState()).currentIndex);
-    }
-    db.getAllRules().then(rules => { console.log('rules:', rules); });
-}
-
-
-export async function loadIndex(url: string) {
-    console.log("loading Index");
-    const response = await fetch(url);
-    const text = await response.text();
-    const index = RuleIndex.from(JSON.parse(text));
-    if (!index) {
-        console.error("Index is null");
-        return;
-    }
-
-    // Save index somewhere I can use everywhere
-    // console.log(response, text, index, getState());
-    (await getState()).currentIndex = index;
-    (await getState()).save();
-    return Promise.resolve(index);
+    console.log("DB opened");
+    getState().then(async state => {
+        console.log("Await State loaded", state);
+        if (state.currentIndex?.entries) {
+            db.addRule(state.currentIndex!.entries[0]);
+            var rule = await db.getRule(state.currentIndex!.entries[0].id);
+            console.log(rule);
+        } else {
+            console.log("NO STATE ????", state.currentIndex);
+        }
+        db.getAllRules().then(rules => { console.log('rules:', rules); });
+    });
 }
