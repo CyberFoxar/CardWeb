@@ -3,17 +3,19 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { customElement, property } from 'lit/decorators.js';
 
 import { marked } from "marked";
+// TODO: is front-matter really useful here ?
 import * as yamlFront from "yaml-front-matter";
 import { MarkdownToc } from '../../MarkdownToc';
+import { styles } from '~src/styles/global-styles';
+import { getState } from '~src/ts/utils/AppState';
 
 @customElement('md-view')
 export class MarkdownViewElement extends LitElement {
 
+    static styles = [styles];
+
     @property()
     public markdownFileText: string | null = "";
-
-    @property({ type: Object })
-    public generatedMenu: HTMLElement | null = null;
 
     // Not state per-se, but also needed
     private TOC = new MarkdownToc();
@@ -90,7 +92,7 @@ export class MarkdownViewElement extends LitElement {
         const markedHTML = marked(fmDoc.__content);
 
         // At this point, TOC is filled with our items
-        this.generateMenu();
+        this.generateTOC();
 
         return html`
         <div class="prose dark:prose-invert">${unsafeHTML(markedHTML)}</div>
@@ -98,18 +100,10 @@ export class MarkdownViewElement extends LitElement {
 
     }
 
-    generateMenu() {
-        if (!this.generatedMenu) {
-            console.error("No generated-menu element found, not building one.");
-            return;
-        }
+    async generateTOC() {
         // Clear menu
-        while (this.generatedMenu.firstChild) {
-            this.generatedMenu.removeChild(this.generatedMenu.firstChild);
-        }
-        const ul = this.TOC.toUl();
-        console.log(this.generatedMenu, this.TOC);
-        this.generatedMenu.appendChild(ul);
+        var state = await getState();
+        state.currentTOC = this.TOC;
     }
 
 }

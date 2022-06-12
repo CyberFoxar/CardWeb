@@ -15,3 +15,10 @@ export function queryShadow([firstShadowSelector, ...restOfTheShadowSelectors]: 
     console.log(firstShadow, lastShadow);
     return lastShadow
 }
+
+export function queryShadowClass([firstShadowSelector, ...restOfTheShadowSelectors]: string[], itemSelector: string): Element | null {
+    const reduceFunction = (currShadow: any, nextShadowSelector: any) => currShadow.shadowRoot.querySelector(nextShadowSelector);    
+    const firstShadow = document.querySelector(firstShadowSelector);
+    const lastShadow = restOfTheShadowSelectors.reduce(reduceFunction,firstShadow);
+    return lastShadow && lastShadow.querySelector(itemSelector);
+}

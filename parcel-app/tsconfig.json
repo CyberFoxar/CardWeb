@@ -13,6 +13,9 @@
         "~src/*": [
           "./src/*"
         ],
+        "~components/*": [
+          "./src/ts/components/*"
+        ]
       },
       "esModuleInterop": true,
     }

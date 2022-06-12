@@ -11,7 +11,7 @@ module.exports = {
     clean: true,
     publicPath: '/'
   },
-  devtool: 'inline-source-map',
+  devtool: 'eval-cheap-source-map',
   devServer: {
     historyApiFallback: true,
     static: [
@@ -27,17 +27,26 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+          },],
       },
       {
         test: /\.(ts|tsx)$/,
-        use: [{
-          loader: "esbuild-loader",
-          options: {
-            loader: "ts",
-            target: "es2021",
+        use: [
+          {
+            loader: 'postcss-loader',
           },
-        }],
+          {
+            loader: "esbuild-loader",
+            options: {
+              loader: "ts",
+              target: "es2021",
+            },
+          }],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,

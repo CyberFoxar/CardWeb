@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import { outlet, router, navigator, Routes } from 'lit-element-router';
 
 import { customElement, property } from 'lit/decorators.js';
+import { MarkdownToc } from '~src/ts/MarkdownToc';
 import { getState } from '../../utils/AppState';
 
 // Import components for webpack
@@ -39,7 +40,17 @@ export class RouterComponent extends router(outlet(LitElement)) {
         this.params = params;
         this.query = query;
         this.data = data;
+
+        if(route && !route.startsWith("rule")) {
+            this.clearTOC();
+        }
+
         console.log('route:', route, 'params:', params, 'query:', query, 'data:', data);
+    }
+
+    async clearTOC() {
+        var state = await getState();
+        state.currentTOC = new MarkdownToc();
     }
 
     render() {

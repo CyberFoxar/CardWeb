@@ -23,6 +23,7 @@
     "esbuild-loader": "^2.19.0",
     "html-webpack-plugin": "^5.5.0",
     "postcss": "^8.4.14",
+    "postcss-lit": "^0.4.3",
     "postcss-loader": "^7.0.0",
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.0.24",

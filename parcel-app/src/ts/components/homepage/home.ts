@@ -1,14 +1,17 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { Rule } from '~src/ts/models/Index.model';
 import { getState } from '~src/ts/utils/AppState';
 import '~src/ts/components/routing-components/router-link';
+import { styles } from '~src/styles/global-styles';
 
 @customElement('homepage-view')
 class HomepageElement extends LitElement {
 
   @state()
   private entries: Rule[] = [];
+
+  static styles = [styles, css``];
 
   constructor() {
     super();

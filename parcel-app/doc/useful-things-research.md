@@ -37,3 +37,71 @@ I began with parcel. All was well until I had to dig in to handle complex stuff,
 So i've elected to change. But what to choose ?
 Lit has a default implementation using rollup, but webpack is more widerly used/available.
 I elected to go with webpack, it's got a load of resources and support, it's highly configurable and it work with what I want.
+
+# Tailwind, lit, and the shadow of ~~man~~ dom
+So.
+Tailwind is great and all, but shadow dom is, well, a shadow. It doesn't cascade styles, or anything else like that.
+Removing the shadow dom is a can of worms, as it might (and by might I mean break) our router, and I don't want to change my router lib or do it myself.
+So, tailwind has a problem, it needs to read CSS using postCSS, however, it also needs to encapsulate its styles in CSS template literals, sometimes. The issue with that, is that I'm a fucking pig which has a ton of annoying code and legacy stuff. 
+I could probably makje tailwind work with lit. Maybe. Those guys did:
+https://dev.to/43081j/using-tailwind-at-build-time-with-web-components-1bhm
+https://dev.to/43081j/using-tailwind-postcss-and-stylelint-with-lit-element-projects-2hb9
+
+But their methods are annoying, look brittle, and depends on stuff I don't feel like doing. I'll try the first guy's method, for kicks.
+It works. Somewhat. Styles do not seem to work outside of components, though.
+But, it didn't work, really. And would require more work than I'm willing to put to make it work.
+Sooo...
+We're removing tailwind.
+
+OR NOT LOL
+We're trying again, this time we encapsulate our whole app inside a component, hopefully this will solve some things.
+Let's try the first link, again.
+We're going to use `cssnano` `postcss-loader` `cssnano-preset-lit` `postcss-syntax` `@stylelint/postcss-css-in-js`
+We want to load the emitted JS from our typescript loader into postcss:
+```js
+  module: {
+    rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        use: [{
+          loader: "esbuild-loader",
+          options: {
+            loader: "ts",
+            target: "es2021",
+          },
+        },
+        'postcss-loader'],
+      },
+    ]
+  }
+```
+Then, we modify `postcss.config.js`
+```js
+module.exports = {
+  syntax: require('@stylelint/postcss-css-in-js'),
+  plugins: [
+    require('tailwindcss/nesting'),
+    require('tailwindcss'),
+    require('autoprefixer'),
+    require('cssnano')({
+      preset: require('cssnano-preset-lite')
+    })
+  ]
+}
+```
+
+And this should allow us to have a working css-in-js solution.
+Then, we need to modify our tailwind styles to actually work inside our components.
+This will require the use of a css template literal, and exporting the variable for our styles by encapsulating them inside:
+```ts
+// inside styles.ts
+import { css } from "lit";
+
+export const styles = css`...`
+```
+
+Though if we're doing that, we might as well use `postcss-lit` and save ourselves the hassle.
+
+# Markdown parsing
+`Marked` is a big chonky boy, if I want to shave some kb I could try to learn to use `unified` and `remark`, and even replace `yaml-front-matter` with `remark-frontmatter`.
+All in all, I could probably /3 or /2 the vendor size.
