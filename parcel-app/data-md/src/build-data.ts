@@ -73,7 +73,7 @@ function main() {
 function copyFilesToFinalDist() {
   const files = getFiles(truedir);
   const destPath = path.resolve(__dirname, finaldir);
-  console.log(`Copying files ${files} to ${destPath}`);
+  console.log(`Copying files`, files , `to ${destPath}`);
   files.forEach(file => {
     const filename = path.basename(file);
     const destFilePath = path.resolve(destPath, filename);
