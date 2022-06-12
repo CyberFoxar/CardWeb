@@ -105,3 +105,16 @@ Though if we're doing that, we might as well use `postcss-lit` and save ourselve
 # Markdown parsing
 `Marked` is a big chonky boy, if I want to shave some kb I could try to learn to use `unified` and `remark`, and even replace `yaml-front-matter` with `remark-frontmatter`.
 All in all, I could probably /3 or /2 the vendor size.
+
+# Routing
+We have some problems with the routing we're using:
+It sucks -- It's old. It's wonky. It does not lazy-load. It does not support (really) lit2. It is not actively developped or reviewed.
+We should probably change it. 
+
+Current options are:
+Vaadin route: https://vaadin.com/router -- Somewhat actively developped and has actual peopleS behind it. 
+Implement it ourselves -- That would require quite a lot of work that might not be needed.
+  Resources for it: https://www.willtaylor.blog/client-side-routing-in-vanilla-js/
+  https://info340.github.io/client-side-routing.html
+  https://medium.com/swlh/lets-code-a-client-side-router-for-your-no-framework-spa-19da93105e10
+  

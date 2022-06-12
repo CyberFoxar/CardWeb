@@ -116,10 +116,10 @@ And then fixed all the styles to get back to where we were.
 ~~Add index entries link into homepage (so I can finally remove them from sidebar)~~ done, but ugly
 ~~Add fucking favicon (favicon made, but not implemented) DONE~~
 
-Add better way to update TOC, maybe using events ?
-  Like, when a document is "finished processing" you send an event to a lot of listeners with the new MarkdownTOC, would be better than replacing HTML inside divs, esp. for sidebar content.
+Add better way to update TOC, maybe using events ? -- DONE ! Sorta. Enough.
+  ~~Like, when a document is "finished processing" you send an event to a lot of listeners with the new MarkdownTOC, would be better than replacing HTML inside divs, esp. for sidebar content.~~
 
-Make permalink work (like, /rule/belote from cold should work).
+~~Make permalink work (like, /rule/belote from cold should work).~~ DONE !
 
 Merge into master, fix CI/CD
 
