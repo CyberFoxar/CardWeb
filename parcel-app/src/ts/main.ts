@@ -43,7 +43,7 @@ export class App extends LitElement {
                 </div>
         
                 <nav
-                    class="cw-sidebar pl-8 p-2 fixed left top-0 invisible  z-40 ml-auto 
+                    class="cw-sidebar pl-8 p-2 fixed left top-0 invisible bg-gray-600 z-40 ml-auto 
                     lg:pl-4 lg:pt-2 lg:pr-0 lg:max-w-xs lg:relative lg:flex-initial lg:bg-inherit lg:z-auto lg:visible">
                     <!-- Above, everything is mobile first then lg breakpoint for bigger screens. -->
                     <router-link href="/" class="no-underline"><p class="no-underline text-pink-200">CardWeb</p></router-link>
@@ -52,9 +52,6 @@ export class App extends LitElement {
                         <!-- Where the available documents are -->
                         <!-- Temp placement move into sidebar -->
                     </div>
-        
-                    <router-link href="/test">test</router-link>
-        
                     <cw-toc-sidebar></cw-toc-sidebar>
                 </nav>
         

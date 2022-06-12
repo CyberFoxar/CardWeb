@@ -11,7 +11,7 @@ module.exports = {
     clean: true,
     publicPath: '/'
   },
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   devServer: {
     historyApiFallback: true,
     static: [
@@ -32,15 +32,6 @@ module.exports = {
           'css-loader',
           {
             loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  require('tailwindcss/nesting')(),
-                  require('tailwindcss')(),
-                  require('autoprefixer')(),
-                ]
-              }
-            }
           },],
       },
       {
@@ -48,16 +39,6 @@ module.exports = {
         use: [
           {
             loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                syntax: require('postcss-lit'),
-                plugins: [
-                  require('tailwindcss/nesting')(),
-                  require('tailwindcss')(),
-                  require('autoprefixer')(),
-                ]
-              }
-            }
           },
           {
             loader: "esbuild-loader",
