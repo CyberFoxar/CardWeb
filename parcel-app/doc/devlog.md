@@ -110,6 +110,13 @@ We made it work with our components. WE MADE IT WORK.
 And we also added an entry point component, because we need one.
 And then fixed all the styles to get back to where we were.
 
+# 2022-06-13
+Done... a bunch of things.
+Fixed tailwind
+Fixed some bugs
+Fixed w/Xo CI/CD and put a build + deploy process
+
+
 # todo short term:
 ~~Add IndexEntries in indexedDB -- DONE~~ (need to do it better, but works good enough for now)
 ~~Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such) -- on it~~ -- done, sorta
@@ -121,7 +128,16 @@ Add better way to update TOC, maybe using events ? -- DONE ! Sorta. Enough.
 
 ~~Make permalink work (like, /rule/belote from cold should work).~~ DONE !
 
-Merge into master, fix CI/CD
+~~Merge into master, fix CI/CD~~ DONE \o/
+
+~~BUG: Coming from an empty localstorage/indexedDB does not work.~~ fixed
+~~BUG: On first load of homepage component, rules are not there, only by switching on/off they appear.~~ done, a bit ugly but works.
+WEIRD: Sidebar do not have a fixed enough width, makes it jump around on load when long titles are there
+~~BUG: On first load of a rule page, content is not properly scrolled to according to anchor.~~ ugly fix, but it works.
+
+Nice to have: A way to clear storage
+Nice to have: Better events
+Nice to have: Refactor fetch/view to use lit directive like `until`.
 
 # Todo long term:
 See [Reseach](useful-things-research.md).
@@ -135,7 +151,8 @@ See [Reseach](useful-things-research.md).
     - App styles
     - DarkTheme & ClearTheme
     - Accordeons (a la m.wikipedia ? Open by default)
-- ScrollSpy (unsure)
+    - ToC at the top of articles too (_a la_ wikipedia mobile, open by default on mobile, closed on bigger screens)
+- ScrollSpy (unsure -- would be dope)
 - Search
   Will probably be an indexedDB search thingamajid of some sort. Not sure how I'll handle it yet.
 - JS card game plugin thing
@@ -143,5 +160,5 @@ See [Reseach](useful-things-research.md).
   - md extension
   - visuals
   - mock-up
-- Prepare CI/CD
-  - Build working dockerfile
+- Prepare CI/CD ✅
+  - ~~Build working dockerfile~~ -- no need

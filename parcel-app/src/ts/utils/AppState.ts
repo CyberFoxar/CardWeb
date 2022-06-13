@@ -43,14 +43,22 @@ export class State {
         try {
             console.log("Loading state");
 
+            var state: State;
             if (!window.localStorage.getItem('cwAppState')) {
-                throw (new Error("No state to load, creating blank state"));
+                console.warn("No state to load, creating blank state");
+                // If load could be called, then this is a blank state already, so just continue.
+                state = this;
+            }
+            else {
+                // We have a state in storage, and try copying to properties we want into our own state
+                state = JSON.parse(window.localStorage.getItem('cwAppState')!) as State;
             }
 
-            // Assume we have a state, and try copying to properties we want into our own state
-            var state = JSON.parse(window.localStorage.getItem('cwAppState')!) as State;
+
             if (this.currentStateVersion !== state.currentStateVersion) {
-                throw (new Error("State version mismatch, cannot load state"));
+                console.warn("State version mismatch, cannot load state, resetting to blank state");
+                // TODO: migrate state properly
+                window.localStorage.removeItem('cwAppState');
             }
 
             if (state.currentIndex) {

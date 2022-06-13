@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, PropertyValueMap } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { customElement, property } from 'lit/decorators.js';
 
@@ -34,10 +34,7 @@ export class MarkdownViewElement extends LitElement {
         // So we reimplement it from the change in URL
         // This means grabbing the change, interpreting which title we want, then slugging it to query the right element to scroll to
         window.addEventListener('hashchange', () => {
-            var slugger = new marked.Slugger();            
-            var selector = '#' + slugger.slug(decodeURI(location.hash).substring(1));
-            // console.log("selector:", selector);
-            this.shadowRoot!.querySelector(selector)!.scrollIntoView();
+            this.scrollToLocation();
         }, false);
 
         const that = this;
@@ -99,11 +96,33 @@ export class MarkdownViewElement extends LitElement {
         `;
 
     }
-
     async generateTOC() {
         // Clear menu
         var state = await getState();
         state.currentTOC = this.TOC;
+    }
+
+    // Ugly but works
+    scrollFirstLoad = true;
+    protected update(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+        super.update(changedProperties);
+        try {
+            if (this.scrollFirstLoad) {
+                this.scrollToLocation();
+                this.scrollFirstLoad = false;
+            }
+        } catch (e) {
+            console.log("Error scrolling to location, retrying until it works");
+        }
+    }
+
+    scrollToLocation() {
+        console.log("Scrolling to location");
+        var slugger = new marked.Slugger();
+        var selector = '#' + slugger.slug(decodeURI(location.hash).substring(1));
+        if (selector.length <= 1) return;
+        console.log("selector:", selector, 'in: ', this, this.shadowRoot);
+        this.shadowRoot!.querySelector(selector)!.scrollIntoView();
     }
 
 }

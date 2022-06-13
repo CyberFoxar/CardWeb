@@ -19,12 +19,19 @@ class HomepageElement extends LitElement {
   }
 
   async subToIndexChanges() {
-    (await getState()).subEvent.on(e => {
+    var state = await getState();
+
+    this.entries = state.currentIndex?.entries ?? [];
+    this.requestUpdate();
+
+    state.subEvent.on(e => {
       getState().then(state => {
         this.entries = state.currentIndex?.entries ?? [];
         this.requestUpdate();
       });
     });
+
+
   }
 
   render() {
@@ -41,7 +48,9 @@ class HomepageElement extends LitElement {
       </p>
     
       ${this.entries.map(entry => html`
-      <div><router-link href="/rule/${entry.id}">${entry.id}</router-link></div>
+      <div>
+        <router-link href="/rule/${entry.id}">${entry.id}</router-link>
+      </div>
       `)}
     </div>
     `;

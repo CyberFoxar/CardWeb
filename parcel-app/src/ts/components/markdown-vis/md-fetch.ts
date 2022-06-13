@@ -1,9 +1,10 @@
 import { css, CSSResultGroup, html, LitElement } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import { getState } from '~src/ts/utils/AppState';
 import { loadFront } from 'yaml-front-matter';
 
 import '../markdown-vis/md-view';
+import { MarkdownViewElement } from '../markdown-vis/md-view';
 
 /**
  * Fetches and displays a markdown file, using only its id and some infos from the ruleIndex.
@@ -30,6 +31,9 @@ export class MarkdownFetchElement extends LitElement {
 
     @state()
     private currentLoadedRuleText: string;
+
+    @query('md-view')
+    private viewport!: MarkdownViewElement;
 
     // TODO: changeme for prod
     private rulesRoot = "/fr/";
