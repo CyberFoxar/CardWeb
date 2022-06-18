@@ -90,15 +90,15 @@ async function main() {
     var db = new IndexedDB();
     await db.openDB();
     console.log("DB opened");
-    getState().then(async state => {
-        console.log("Await State loaded", state);
-        if (state.currentIndex?.entries) {
-            db.addRule(state.currentIndex!.entries[0]);
-            var rule = await db.getRule(state.currentIndex!.entries[0].id);
-            console.log(rule);
-        } else {
-            console.log("NO STATE ????", state.currentIndex);
-        }
-        db.getAllRules().then(rules => { console.log('rules:', rules); });
-    });
+    // getState().then(async state => {
+    //     console.log("Await State loaded", state);
+    //     if (state.currentIndex?.entries) {
+    //         db.addRule(state.currentIndex!.entries[0]);
+    //         var rule = await db.getRule(state.currentIndex!.entries[0].id);
+    //         console.log(rule);
+    //     } else {
+    //         console.log("NO STATE ????", state.currentIndex);
+    //     }
+    //     db.getAllRules().then(rules => { console.log('rules:', rules); });
+    // });
 }

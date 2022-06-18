@@ -117,4 +117,13 @@ Implement it ourselves -- That would require quite a lot of work that might not 
   Resources for it: https://www.willtaylor.blog/client-side-routing-in-vanilla-js/
   https://info340.github.io/client-side-routing.html
   https://medium.com/swlh/lets-code-a-client-side-router-for-your-no-framework-spa-19da93105e10
-  
+
+# Let's take it offline (PWA?)
+I want to make my website work even on a limited (or absent) internet connection.
+How do I do this?
+The idea for a Progressive Web App
+
+## Resources
+https://pocketjavascript.com/blog/2015/11/23/introducing-pokedex-org
+https://pwaresources.dev/ 
+https://web.dev/learn/pwa/

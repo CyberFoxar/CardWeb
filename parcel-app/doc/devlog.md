@@ -118,6 +118,17 @@ Fixed w/Xo CI/CD and put a build + deploy process
 
 
 # todo short term:
+
+Create caching system
+Save rules in indexedDB
+Handle rule version change in db
+
+Add permalink next to headings
+
+Nice to have: A way to clear storage
+Nice to have: Better events
+Nice to have: Refactor fetch/view to use lit directive like `until`.
+
 ~~Add IndexEntries in indexedDB -- DONE~~ (need to do it better, but works good enough for now)
 ~~Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such) -- on it~~ -- done, sorta
 ~~Add index entries link into homepage (so I can finally remove them from sidebar)~~ done, but ugly
@@ -134,10 +145,6 @@ Add better way to update TOC, maybe using events ? -- DONE ! Sorta. Enough.
 ~~BUG: On first load of homepage component, rules are not there, only by switching on/off they appear.~~ done, a bit ugly but works.
 WEIRD: Sidebar do not have a fixed enough width, makes it jump around on load when long titles are there
 ~~BUG: On first load of a rule page, content is not properly scrolled to according to anchor.~~ ugly fix, but it works.
-
-Nice to have: A way to clear storage
-Nice to have: Better events
-Nice to have: Refactor fetch/view to use lit directive like `until`.
 
 # Todo long term:
 See [Reseach](useful-things-research.md).
