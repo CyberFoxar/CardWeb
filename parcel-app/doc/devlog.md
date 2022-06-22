@@ -116,6 +116,10 @@ Fixed tailwind
 Fixed some bugs
 Fixed w/Xo CI/CD and put a build + deploy process
 
+# 2022-06-18
+Fixed some tiny bugs.
+Thought long and hard about how to offline-ize my app. Still no sold on any particular thing. I'm just annoyed rn.
+See [this](useful-things-research.md#lets-take-it-offline-pwa)
 
 # todo short term:
 
