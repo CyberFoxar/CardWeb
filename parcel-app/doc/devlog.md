@@ -121,6 +121,12 @@ Fixed some tiny bugs.
 Thought long and hard about how to offline-ize my app. Still no sold on any particular thing. I'm just annoyed rn.
 See [this](useful-things-research.md#lets-take-it-offline-pwa)
 
+# 2022-06-22
+First try at service workers. Made my own webpack plugin, heh.
+
+Service worker is registered, but nothing much else happens.
+I should try to "simply" compile my TS file / do a basic JS service worker and serve it with a simple HTTP server to see if this works. I suspect it's all the runtime/vendor shit that webpack add to my file that breaks it.
+
 # todo short term:
 
 Create caching system

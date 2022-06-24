@@ -8,7 +8,6 @@ import { IndexedDB } from "./utils/IndexedDB";
 import { customElement, query } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
 import { styles } from "~src/styles/global-styles";
-
 @customElement('cw-app')
 export class App extends LitElement {
     static styles = [styles,
@@ -90,6 +89,56 @@ async function main() {
     var db = new IndexedDB();
     await db.openDB();
     console.log("DB opened");
+
+    window.addEventListener('message', event => {
+        console.log('[MAIN] message event:', event);
+    });
+
+    console.log("Try to register ?")
+    async function registerServiceWorker() {
+        console.log("registering?");
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener("message", (e) => {
+                console.log("[MAIN] message from [SW]: ", e);
+            });
+
+            try {
+                const registration = await navigator.serviceWorker.register(
+                    '/serviceWorker.js',
+                    {
+                        scope: '/',
+                    }
+                );
+                if (registration.installing) {
+                    console.log('Service worker installing');
+                } else if (registration.waiting) {
+                    console.log('Service worker installed');
+                } else if (registration.active) {
+                    console.log('Service worker active');
+                }
+            } catch (error) {
+                console.error(`Registration failed with ${error}`);
+            }
+
+            navigator.serviceWorker.controller?.postMessage("Henlo service worker");
+        }
+    };
+    registerServiceWorker();
+    // fetch('/assets.json').then(async (response) => {
+    //     const b = await response.text();
+    //     const c = JSON.parse(b);
+
+    //     c?.assets.forEach(a => {
+    //         fetch(a).then(async (r) => {
+    //             const d = await r.text();
+    //             console.log(`==========${a}=========`)
+    //             console.log(d);
+    //         })
+    //     });
+
+    //     console.log(c);
+    // });
+
     // getState().then(async state => {
     //     console.log("Await State loaded", state);
     //     if (state.currentIndex?.entries) {

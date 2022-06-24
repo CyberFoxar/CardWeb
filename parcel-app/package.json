@@ -22,6 +22,7 @@
     "css-loader": "^6.7.1",
     "esbuild-loader": "^2.19.0",
     "html-webpack-plugin": "^5.5.0",
+    "http-server": "^14.1.1",
     "postcss": "^8.4.14",
     "postcss-lit": "^0.4.3",
     "postcss-loader": "^7.0.0",
@@ -43,6 +44,7 @@
     "build": "webpack",
     "build:md": "cd data-md && yarn && yarn build",
     "start:dev": "webpack-dev-server",
+    "start": "http-server dist",
     "start:md": "cd data-md && npm run start",
     "copy-files": "cp -r data-md/fr/ dist-prod/ && mkdir dist-prod/indexes/ && cp data-md/fr-index.json dist-prod/indexes/fr-index.json"
   }

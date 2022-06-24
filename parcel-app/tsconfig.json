@@ -9,6 +9,7 @@
       "moduleResolution": "node",
       "allowSyntheticDefaultImports": true,
       "baseUrl": ".",
+      "lib": ["ES2021", "DOM", "WebWorker"],
       "paths": {
         "~src/*": [
           "./src/*"

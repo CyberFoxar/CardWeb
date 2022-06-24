@@ -159,6 +159,14 @@ The OG code seem fine, but the various steps seem to break it.
 
 I might look into making my own plugin which emulate its features.
 
+2022-06-22
+Made my own webpack plugin ! It simply export the asset list with their names and directory relative to origin. 
+Note: Service worker `scope` cannot be greater than where it is itself.
+
+2022-06-24
+Service worker working with typescript and webpack and dev-server. I only had to do weird stuff.
+I'm not really happy with the whole boilerplate that webpack add to my file but for now it'll do (changing that would probably require doing something similar to serviceworker-webpack-plugin and I'm not ready for that yet).
+I should probably overhaul that, but for now it'll work.
 
 
 ## Resources
