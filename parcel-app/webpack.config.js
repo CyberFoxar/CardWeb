@@ -81,7 +81,7 @@ var mainConfig = {
         directory: path.join(__dirname, 'sw'),
       }
     ],
-    https: true,
+    server: 'https',
   },
   plugins: [
     new HtmlWebpackPlugin({

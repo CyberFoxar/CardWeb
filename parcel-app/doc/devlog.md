@@ -127,6 +127,13 @@ First try at service workers. Made my own webpack plugin, heh.
 Service worker is registered, but nothing much else happens.
 I should try to "simply" compile my TS file / do a basic JS service worker and serve it with a simple HTTP server to see if this works. I suspect it's all the runtime/vendor shit that webpack add to my file that breaks it.
 
+# 2022-06-24
+Service worker works. It's shakey, but enough.
+
+# 2022-07-04
+Better service worker using MDN example as a base: https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
+
+
 # todo short term:
 
 Create caching system

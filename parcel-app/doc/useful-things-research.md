@@ -168,6 +168,8 @@ Service worker working with typescript and webpack and dev-server. I only had to
 I'm not really happy with the whole boilerplate that webpack add to my file but for now it'll do (changing that would probably require doing something similar to serviceworker-webpack-plugin and I'm not ready for that yet).
 I should probably overhaul that, but for now it'll work.
 
+2022-07-04
+Working, log is back into devlog.
 
 ## Resources
 PWAs:
@@ -177,3 +179,6 @@ https://web.dev/learn/pwa/
 
 Service Workers:
 https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
+  Basic API, basic example, very, very useful
+https://www.devextent.com/create-service-worker-typescript/
+  Doing it in typescript, somehow.

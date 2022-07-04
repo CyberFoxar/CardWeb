@@ -96,7 +96,6 @@ async function main() {
 
     console.log("Try to register ?")
     async function registerServiceWorker() {
-        console.log("registering?");
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.addEventListener("message", (e) => {
                 console.log("[MAIN] message from [SW]: ", e);
