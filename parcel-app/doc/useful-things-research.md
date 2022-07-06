@@ -117,4 +117,68 @@ Implement it ourselves -- That would require quite a lot of work that might not 
   Resources for it: https://www.willtaylor.blog/client-side-routing-in-vanilla-js/
   https://info340.github.io/client-side-routing.html
   https://medium.com/swlh/lets-code-a-client-side-router-for-your-no-framework-spa-19da93105e10
-  
+
+# Let's take it offline (PWA?)
+I want to make my website work even on a limited (or absent) internet connection.
+How do I do this?
+The idea for a Progressive Web App is to offer a native-like behavior. This means providing a way and hooks into the push and notifications.
+
+An offline-capable website, at its core need mostly _something_ to cache stuff, and that something is a service worker levraging the cache API and other storage mechanisms.
+A service worker mainly hooks into the `fetch` API to intercept calls and provide a caching stategy.
+
+An issue I will encounter quickly when building my service worker is that webpack makes hashes out of my bundles and compile my JS and do a lot of stuff with it, thus making caching the bundle/assets/things harder.
+To handle this I have multiple options:
+1. use [workbox](https://developer.chrome.com/docs/workbox/), a solution from google to abstract and handle all the service workers, comes with a webpack plugin that does most of the heavy lifting.
+   - I'm adding _another_ build dependency, and need to learn a specific thing
+   - It will probably work long term and be updated for a good long while
+   - It's probably quite robust and good at what it does
+   - Also, is google.
+2. use [offline-plugin](https://github.com/NekR/offline-plugin), a webpack plugin that only caches all the webpack-generated files, but does so automatically.
+   - Not updated, not any news since 2019.
+   - Black box, both a good thing (no need to learn anything) and a bad thing (reliant on webpack, don't know how it works exactly) 
+   - Sorta middle of the road between workbox and serviceworker-webpack
+3. use [serviceworker-webpack-plugin](https://github.com/oliviertassinari/serviceworker-webpack-plugin), a webpack plugins that sits as a very thin layer over webpack and loads a serviceworker while giving it the end generated files.
+   - Not updated, and no news since 2019.
+   - Very thin layer, no type definitions. Will make me learn how to _actually_ do a service worker.
+   - Rely on webpack, but not that heavily.
+   - **Also does not work with webpack 5, so there's that.**
+4. build my own webpack plugin.
+   - Has to learn to build a service worker.
+   - Has to learn to make a webpack plugin
+
+Flemme d'apprendre a faire mes plugins webpack.
+Workbox it is ¯\_(ツ)_/¯
+
+## current state
+2022-06-18
+Workbox: Annoying to use with webpack-dev-server, seems to want to do a lot of things I'm not really wanting to do right now (like precaching a fuckton of stuff ?). It also does _not_ work with webpack-dev-server, which is very annoying -- then again, I might just provide a no-op SW when in dev and work by staging my stuff when working on the SW. It's annoying, but that would work-ish.
+
+serviceworker-webpack-plugin: On paper, does what I want. 
+In practice, is not compatible with webpack 5, despite some forks pretending that it is because (it seems) babel is doing some fucky stuff and compiler/transpiler is adding some hooks which should not be. 
+The OG code seem fine, but the various steps seem to break it.
+
+I might look into making my own plugin which emulate its features.
+
+2022-06-22
+Made my own webpack plugin ! It simply export the asset list with their names and directory relative to origin. 
+Note: Service worker `scope` cannot be greater than where it is itself.
+
+2022-06-24
+Service worker working with typescript and webpack and dev-server. I only had to do weird stuff.
+I'm not really happy with the whole boilerplate that webpack add to my file but for now it'll do (changing that would probably require doing something similar to serviceworker-webpack-plugin and I'm not ready for that yet).
+I should probably overhaul that, but for now it'll work.
+
+2022-07-04
+Working, log is back into devlog.
+
+## Resources
+PWAs:
+https://pocketjavascript.com/blog/2015/11/23/introducing-pokedex-org
+https://pwaresources.dev/ 
+https://web.dev/learn/pwa/
+
+Service Workers:
+https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
+  Basic API, basic example, very, very useful
+https://www.devextent.com/create-service-worker-typescript/
+  Doing it in typescript, somehow.

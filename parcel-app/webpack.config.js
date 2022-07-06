@@ -1,28 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const CwJsonManifestPlugin = require("./src/webpack/jsonAssetsPathPlugin");
 
-module.exports = {
-  entry: './src/ts/main.ts',
+var baseConfig = {
   mode: 'development',
-  output: {
-    filename: 'bundles/[name].[contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
-    clean: true,
-    publicPath: '/'
-  },
   devtool: 'eval-cheap-source-map',
-  devServer: {
-    historyApiFallback: true,
-    static: [
-      {
-        directory: path.join(__dirname, 'dist'),
-      },
-      {
-        directory: path.join(__dirname, 'data-md'),
-      }
-    ],
-  },
   module: {
     rules: [
       {
@@ -54,14 +37,6 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Cardweb',
-      filename: 'index.html',
-      template: 'src/index.html',
-      favicon: 'src/assets/favicon.png',
-    })
-  ],
   resolve: {
     extensions: ['.ts', '.js', '.json'],
     plugins: [new TsconfigPathsPlugin()],
@@ -69,18 +44,74 @@ module.exports = {
       buffer: require.resolve('buffer/'),
     },
   },
-  optimization: {
-    moduleIds: 'deterministic',
-    runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-        },
-      },
+  // optimization: {
+  //   moduleIds: 'deterministic',
+  //   runtimeChunk: 'single',
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       vendor: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: 'vendors',
+  //         chunks: 'all',
+  //       },
+  //     },
 
-    },
+  //   },
+  // },
+};
+
+var mainConfig = {
+  ...baseConfig,
+  entry: './src/ts/main.ts',
+  output: {
+    filename: 'bundles/[name].[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
+  },
+  devServer: {
+    historyApiFallback: true,
+    static: [
+      {
+        directory: path.join(__dirname, 'dist'),
+      },
+      {
+        directory: path.join(__dirname, 'data-md'),
+      },
+      {
+        directory: path.join(__dirname, 'sw'),
+      }
+    ],
+    server: 'https',
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Cardweb',
+      filename: 'index.html',
+      template: 'src/index.html',
+      favicon: 'src/assets/favicon.png',
+    }),
+    new CwJsonManifestPlugin()
+  ],
+};
+
+/**
+ * This is a try at multi-compilation
+ * to have a fixed, unchanging name for our serviceworker file, but still use a typescript file.
+ */
+var serviceWorkerConfig = {
+  ...baseConfig,
+  devtool: false,
+  entry: {
+    serviceWorker: './src/ts/serviceWorker.ts',
+    // sw: {
+    //   import: './src/ts/serviceWorker.ts',
+    //   runtime: 'serviceWorker',
+    // }
+  },
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'dist'),
   },
 };
+
+module.exports = [mainConfig, serviceWorkerConfig];
