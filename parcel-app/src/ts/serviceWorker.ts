@@ -29,16 +29,14 @@ let assetList: assetJSON = { assets: [] };
 console.debug("[SW] booted up?");
 
 globalThis.addEventListener('install', event => {
-    // Perform install steps.
     console.debug('[SW] Install event', event);
-    // fetchAssetList();
+    globalThis.clients.claim();
     event.waitUntil(cacheAll());
 });
 
 globalThis.addEventListener('activate', event => {
     console.debug('[SW] activate event', event);
-    globalThis.clients.claim();
-    event.waitUntil(enableNavigationPreload());
+    event.waitUntil(Promise.all([enableNavigationPreload(), globalThis.clients.claim()]));
 });
 
 globalThis.addEventListener('message', event => {
