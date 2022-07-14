@@ -142,6 +142,11 @@ Handle rule version change in db
 
 Add permalink next to headings
 
+Add multilingual support
+Add search
+
+More rules
+
 Nice to have: A way to clear storage
 Nice to have: Better events
 Nice to have: Refactor fetch/view to use lit directive like `until`.
