@@ -210,6 +210,7 @@ En gros je vais avoir:
 ```
 Règles:
 - Les index désignent les ressources par rapport a leur position
+- Le dossier ou se trouve un index est sa langue
 - Les ressources designent par rapport a leur position ex:
     `love-letter.md`:
     ```md

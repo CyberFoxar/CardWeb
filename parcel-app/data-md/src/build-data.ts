@@ -2,32 +2,33 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as yamlFront from "yaml-front-matter";
 
-// @ts-ignore -- importing using typescript does not work for some reason
-// const fm = require('front-matter');
-
-const dir = '../fr/';
+// Run paramters-ish.
+/** Where are the rules, relative to the generated JS file */
+const dir = '../rules/';
+/** Where is the generated JS file gonna be */
 const distDir = '../dist/';
-const finaldir = '../../dist/fr/';
-// Use glob ?
-// Use copyfiles ?
-// Use something else ?
+/** Where do you want the files to end up if copy is true */
+const finaldir = '../../dist/rules/';
+/** Whether to copy the index + md files */
 const copy = true;
 
 const truedir = path.resolve(__dirname, dir);
 
-function main() {
-  // Read all MD in one folder
-  // Build index as a JSON object
-  // - use frontmatter to handle metadata
-  // Export index in /dist
-  // Do it again for each language
+async function main() {
+  /**
+   * Read all files in dir folder
+   * Parse the markdown files and their yamlfrontmatter to create index entries
+   * Build a main index
+   * write the index to disk
+   * copy the markdown, index, and everything else in dir to finaldir (if copy).
+   * */ 
 
-  console.log(truedir, getFiles(truedir));
+  console.debug(truedir, getFiles(truedir));
   const fileNames = getFiles(truedir);
 
-  const index = new Index('fr', []);
-
-  //TODO: automatically build indexes from end of directory name
+  const mainIndex: MainIndex = {
+    indexes: []
+  };
 
   fileNames.forEach(file => {
     const ext = path.extname(file);
@@ -35,7 +36,7 @@ function main() {
     const fullFilename = path.basename(file);
     if (ext === '.md') {
       const data = fs.readFileSync(file, { encoding: 'utf8' });
-      const lang = path.dirname(file).split('/').pop(); // grabs de parent folder name of the file (use it to select/build index) //TODO
+      const lang = path.dirname(file).split(path.sep).pop()! // grabs de parent folder name of the file and use it to select/build index
       const parsed = yamlFront.loadFront(data);
       const playercount = parseRange(parsed.playercount);
       const playtime = parseRange(parsed.playtime);
@@ -49,42 +50,45 @@ function main() {
         lastEdit,
         encodeURI(fullFilename),
         parsed.__content);
-      index.entries.push(entry);
+
+      // Eventually this should simply references indexes and not copy/have the whole object.
+      // So that they can be lazy-loaded.
+      let mainIndexEntry = mainIndex.indexes.find((el) => el.lang == lang);
+      if(!mainIndexEntry){
+        mainIndexEntry = {
+          index: new Index(lang, []),
+          lang: lang,
+          location: lang
+        }
+        mainIndex.indexes.push(mainIndexEntry);
+      }
+      mainIndexEntry.index.entries.push(entry);
     }
   });
 
-  // console.log(index);
-  console.log("Index built ! Writing to disk...");
+  console.info("Indexes built ! Begin writing.");
 
-  const filename = index.lang + '-index.json';
+  console.info("Writing main index to disk...")
+
+  const filename = 'main-index.json';
   const dirpath = path.resolve(truedir, filename);
   const distpath = path.resolve(__dirname, distDir, filename);
-  fs.writeFileSync(dirpath, JSON.stringify(index, null, 2));
+  fs.writeFileSync(dirpath, JSON.stringify(mainIndex, null, 2));
 
   // // Copy file to dist
   // fs.copyFileSync(dirpath, distpath);
   console.log(`Done writing at ${dirpath}`);
 
   if(copy) {
-    copyFilesToFinalDist();
+    const destDir = path.resolve(__dirname, finaldir);
+    console.info("Copying:", truedir," to ", destDir);
+    await copyDir(truedir, destDir);
+    console.info("Done copying.")
   }
 }
 
-function copyFilesToFinalDist() {
-  const files = getFiles(truedir);
-  const destPath = path.resolve(__dirname, finaldir);
-  console.log(`Copying files`, files , `to ${destPath}`);
-  files.forEach(file => {
-    const filename = path.basename(file);
-    const destFilePath = path.resolve(destPath, filename);
-    fs.mkdirSync(destPath, { recursive: true });
-    fs.copyFileSync(file, destFilePath);
-  });
-  console.log(`Done copying files to ${destPath}`);
-}
 
-
-function getFiles(dir, files_ = []) {
+function getFiles(dir, files_: any[] = []) {
   files_ = files_ || [];
   var files = fs.readdirSync(dir);
   for (var i in files) {
@@ -98,6 +102,21 @@ function getFiles(dir, files_ = []) {
   return files_;
 }
 
+async function copyDir(src, dest) {
+  await fs.promises.mkdir(dest, { recursive: true });
+  console.debug("making dir: ", dest)
+  let entries = await fs.promises.readdir(src, { withFileTypes: true });
+  for (let entry of entries) {
+      let srcPath = path.join(src, entry.name);
+      let destPath = path.join(dest, entry.name);
+
+      entry.isDirectory() ?
+          await copyDir(srcPath, destPath) :
+          console.debug("Copying: ", srcPath, "to ", destPath);
+          await fs.promises.copyFile(srcPath, destPath);
+  }
+}
+
 /**
  * Parse a range of numbers, usually coming from a humain-readable string.
  * @param range undefined, empty, or of formats: '1-3', '5+', '5-', '5'
@@ -106,7 +125,7 @@ function getFiles(dir, files_ = []) {
 function parseRange(range: string | number): { min: number, max: number; } {
   if (!range || range.toString().length === 0) {
     // range does not exist or is empty string
-    return { min: null, max: null };
+    return { min: 0, max: 999 };
   }
   range = range.toString();
 
@@ -138,6 +157,8 @@ function parseRange(range: string | number): { min: number, max: number; } {
 }
 
 
+//TODO:
+// Content should become a summary of some kind rather than the whole stuff. Maybe all the text between the first two titles.
 class IndexEntry {
   constructor(
     public tags = [],
@@ -153,7 +174,7 @@ class IndexEntry {
     },
     public lastupdated?: Date,
     public location?: string,
-    public content = '') {
+    public summary = '') {
     if (!id || id.length === 0) {
       throw new Error(`IndexEntry with tags ${tags}: id is empty`);
     }
@@ -164,6 +185,14 @@ class Index {
   constructor(
     public lang: string,
     public entries: IndexEntry[] = []) { }
+}
+
+interface MainIndex {
+    indexes: {
+      index: Index,
+      lang: string
+      location: string
+    }[]
 }
 
 main();

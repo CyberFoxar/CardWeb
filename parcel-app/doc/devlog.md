@@ -133,6 +133,10 @@ Service worker works. It's shakey, but enough.
 # 2022-07-04
 Better service worker using MDN example as a base: https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
 
+# 2022-07-14
+Layout for multilingual
+Need to redo md gen at compile and md reading at runtime
+
 
 # todo short term:
 
