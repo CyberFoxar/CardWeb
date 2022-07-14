@@ -182,3 +182,39 @@ https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Servic
   Basic API, basic example, very, very useful
 https://www.devextent.com/create-service-worker-typescript/
   Doing it in typescript, somehow.
+
+# Re: DataMD
+Je veux pouvoir avoir un support multilingue.
+Il me faut un "point d'entrée" qui soit fixe, toujours présent, que je puisse mettre en dur/env dans le reste de l'app.
+Ce point d'entrée doit avoir:
+- les indexes
+  - leurs chemins
+  - quelques meta (langue, type?, etc.)
+
+A partir de là, tant que l'arborescence de fichiers est respectée, ça doit pas trop mal se passer?
+En gros je vais avoir:
+```
+├╴main-index.json
+├╴/assets
+│ └╴banner.jpg
+├╴/fr
+│ ├╴/assets
+│ ├╴index.json
+│ ├╴love-letter.md
+│ └╴8-americain.md
+├╴/en
+│ ├╴/assets
+│ ├╴index.json
+│ ├╴love-letter.md
+│ └╴growl.md
+```
+Règles:
+- Les index désignent les ressources par rapport a leur position
+- Les ressources designent par rapport a leur position ex:
+    `love-letter.md`:
+    ```md
+      Here is banner: ![alt-text](../assets/banner.jpg)
+    ```
+    Et normalement ça marche.
+
+A tester que je peux bien respecter ces règles au runtime.

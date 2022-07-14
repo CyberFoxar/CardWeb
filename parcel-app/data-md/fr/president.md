@@ -5,6 +5,7 @@ complexity: 2
 playtime: 30+
 title: President
 ---
+# President
 
 Découvrez les **règles du Présiden**t également appelé plus grossièrement le **Trou du cul**. Ce jeu de cartes très apprécié lors de soirée entre amis se joue facilement et vous fera passer un excellent moment.
 
