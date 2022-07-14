@@ -6,7 +6,6 @@ playtime: 30+
 title: President
 ---
 # President
-
 Découvrez les **règles du Présiden**t également appelé plus grossièrement le **Trou du cul**. Ce jeu de cartes très apprécié lors de soirée entre amis se joue facilement et vous fera passer un excellent moment.
 
 Le but du **jeu du président** est de se débarrasser le premier de toutes ses cartes. Ce jeu se joue idéalement à 4 personnes mais il est possible de jouer jusqu’à 6.

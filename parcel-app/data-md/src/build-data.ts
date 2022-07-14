@@ -21,7 +21,7 @@ async function main() {
    * Build a main index
    * write the index to disk
    * copy the markdown, index, and everything else in dir to finaldir (if copy).
-   * */ 
+   * */
 
   console.debug(truedir, getFiles(truedir));
   const fileNames = getFiles(truedir);
@@ -30,17 +30,29 @@ async function main() {
     indexes: []
   };
 
+  // Matches text between the first title and the next
+  // TODO: maybe support older-type title: "===" and "---"
+  const summaryRegex = new RegExp(/(?<title>#+\s.*)\n*(?<summary>[\S\s.]+?)(?=#)/, 'm');
+
   fileNames.forEach(file => {
     const ext = path.extname(file);
     const lastEdit = fs.statSync(file).mtime;
     const fullFilename = path.basename(file);
     if (ext === '.md') {
       const data = fs.readFileSync(file, { encoding: 'utf8' });
-      const lang = path.dirname(file).split(path.sep).pop()! // grabs de parent folder name of the file and use it to select/build index
+      const lang = path.dirname(file).split(path.sep).pop()!; // grabs de parent folder name of the file and use it to select/build index
       const parsed = yamlFront.loadFront(data);
       const playercount = parseRange(parsed.playercount);
       const playtime = parseRange(parsed.playtime);
       const id = encodeURI(parsed.title.toLowerCase().replace(/\s/g, '-'));
+      const summaryRes = parsed.__content.match(summaryRegex);
+      let summary: string;
+      if (Array.isArray(summaryRes)) {
+        summary = summaryRes!.groups!['summary'].trim();
+      } else {
+        summary = parsed.__content.substring(0, 300).trim();
+      }
+      // console.log(id, summary)
       const entry = new IndexEntry(
         parsed.tags,
         id,
@@ -49,17 +61,17 @@ async function main() {
         playtime,
         lastEdit,
         encodeURI(fullFilename),
-        parsed.__content);
+        summary);
 
       // Eventually this should simply references indexes and not copy/have the whole object.
       // So that they can be lazy-loaded.
       let mainIndexEntry = mainIndex.indexes.find((el) => el.lang == lang);
-      if(!mainIndexEntry){
+      if (!mainIndexEntry) {
         mainIndexEntry = {
           index: new Index(lang, []),
           lang: lang,
           location: lang
-        }
+        };
         mainIndex.indexes.push(mainIndexEntry);
       }
       mainIndexEntry.index.entries.push(entry);
@@ -68,22 +80,21 @@ async function main() {
 
   console.info("Indexes built ! Begin writing.");
 
-  console.info("Writing main index to disk...")
+  console.info("Writing main index to disk...");
 
   const filename = 'main-index.json';
   const dirpath = path.resolve(truedir, filename);
   const distpath = path.resolve(__dirname, distDir, filename);
   fs.writeFileSync(dirpath, JSON.stringify(mainIndex, null, 2));
 
-  // // Copy file to dist
-  // fs.copyFileSync(dirpath, distpath);
+  // Copy file to dist
   console.log(`Done writing at ${dirpath}`);
 
-  if(copy) {
+  if (copy) {
     const destDir = path.resolve(__dirname, finaldir);
-    console.info("Copying:", truedir," to ", destDir);
+    console.info("Copying:", truedir, " to ", destDir);
     await copyDir(truedir, destDir);
-    console.info("Done copying.")
+    console.info("Done copying.");
   }
 }
 
@@ -103,17 +114,20 @@ function getFiles(dir, files_: any[] = []) {
 }
 
 async function copyDir(src, dest) {
+  console.debug("making dir: ", dest);
   await fs.promises.mkdir(dest, { recursive: true });
-  console.debug("making dir: ", dest)
   let entries = await fs.promises.readdir(src, { withFileTypes: true });
   for (let entry of entries) {
-      let srcPath = path.join(src, entry.name);
-      let destPath = path.join(dest, entry.name);
+    let srcPath = path.join(src, entry.name);
+    let destPath = path.join(dest, entry.name);
 
-      entry.isDirectory() ?
-          await copyDir(srcPath, destPath) :
-          console.debug("Copying: ", srcPath, "to ", destPath);
-          await fs.promises.copyFile(srcPath, destPath);
+    if (entry.isDirectory()) {
+      await copyDir(srcPath, destPath);
+    } else {
+      console.debug("Copying: ", srcPath, "to ", destPath);
+      await fs.promises.copyFile(srcPath, destPath);
+    }
+
   }
 }
 
@@ -188,11 +202,11 @@ class Index {
 }
 
 interface MainIndex {
-    indexes: {
-      index: Index,
-      lang: string
-      location: string
-    }[]
+  indexes: {
+    index: Index,
+    lang: string;
+    location: string;
+  }[];
 }
 
 main();
