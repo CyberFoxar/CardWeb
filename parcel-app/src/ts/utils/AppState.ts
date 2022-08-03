@@ -1,17 +1,17 @@
 import { MarkdownToc } from "../MarkdownToc";
-import { RuleIndex } from "../models/Index.model";
+import { MainIndex, MainIndexJson, RuleIndex } from "../models/Index.model";
 import { SubscribableEvent } from "./SubscribableEvent";
 
 export class State {
 
     public subEvent = new SubscribableEvent<String>();
-    private currentStateVersion = 1;
+    private currentStateVersion = 2;
 
-    private _currentIndex: RuleIndex | null = null;
-    public get currentIndex(): RuleIndex | null {
+    private _currentIndex: MainIndex | null = null;
+    public get currentIndex(): MainIndex | null {
         return this._currentIndex;
     }
-    public set currentIndex(value: RuleIndex | null) {
+    public set currentIndex(value: MainIndex | null) {
         this._currentIndex = value;
         this.subToIndexChanges();
         this.subEvent.fire("index:set");
@@ -32,9 +32,11 @@ export class State {
     private subToIndexChanges() {
         if (this.currentIndex) {
             console.log("Subscribing to index changes");
-            this.currentIndex.subEvent.on((e) => {
-                this.subEvent.fire(e);
-            });
+            this.currentIndex.indexes.forEach(i => {
+                i.index.subEvent.on((e) => {
+                    this.subEvent.fire(e);
+                });
+            })
         }
     }
 
@@ -56,16 +58,19 @@ export class State {
 
 
             if (this.currentStateVersion !== state.currentStateVersion) {
-                console.warn("State version mismatch, cannot load state, resetting to blank state");
+                console.warn("State version mismatch, cannot load state, removing saved state and retrying.");
                 // TODO: migrate state properly
                 window.localStorage.removeItem('cwAppState');
+                return this.load();
             }
 
             if (state.currentIndex) {
-                this.currentIndex = new RuleIndex(state.currentIndex.lang, state.currentIndex.entries);
+                this.currentIndex = {indexes: state.currentIndex.indexes}
             } else {
-                var index = await this.loadIndex("/fr/fr-index.json");
+                // TODO: Env Var/config file for this
+                var index = await this.loadIndex("/rules/main-index.json");
                 this.currentIndex = index;
+                this.save();
             }
 
             this.subToIndexChanges();
@@ -78,14 +83,14 @@ export class State {
         }
     }
 
-    async loadIndex(url: string): Promise<RuleIndex> {
+    async loadIndex(url: string): Promise<MainIndex> {
         return new Promise(async (resolve, reject) => {
-            var index: RuleIndex | null;
+            var index: MainIndex | null;
             try {
                 console.log("loading Index");
                 const response = await fetch(url);
                 const text = await response.text();
-                index = RuleIndex.from(JSON.parse(text));
+                index = RuleIndex.fromMainIndexJson(JSON.parse(text));
                 if (!index) {
                     throw ("Index is null");
                 }

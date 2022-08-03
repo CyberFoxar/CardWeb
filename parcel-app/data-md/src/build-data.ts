@@ -30,9 +30,9 @@ async function main() {
     indexes: []
   };
 
-  // Matches text between the first title and the next
-  // TODO: maybe support older-type title: "===" and "---"
-  const summaryRegex = new RegExp(/(?<title>#+\s.*)\n*(?<summary>[\S\s.]+?)(?=#)/, 'm');
+  // Matches text between the first title (heading 1) and the next (heading n)
+  // Also support alternative headings "===" and "---"
+  const summaryRegex = new RegExp(/(?<title>(#+\s.*)|(.*\n={3,}))\n*(?<summary>[\S\s.]+?)(?=#|-{3,}|={3,})/, 'm');
 
   fileNames.forEach(file => {
     const ext = path.extname(file);
@@ -170,9 +170,9 @@ function parseRange(range: string | number): { min: number, max: number; } {
   };
 }
 
-
-//TODO:
-// Content should become a summary of some kind rather than the whole stuff. Maybe all the text between the first two titles.
+/**
+ * Main interface/class for an index entry.
+ */
 class IndexEntry {
   constructor(
     public tags = [],
@@ -188,7 +188,7 @@ class IndexEntry {
     },
     public lastupdated?: Date,
     public location?: string,
-    public summary = '') {
+    public content = '') {
     if (!id || id.length === 0) {
       throw new Error(`IndexEntry with tags ${tags}: id is empty`);
     }

@@ -31,12 +31,12 @@ console.debug("[SW] booted up?");
 globalThis.addEventListener('install', event => {
     console.debug('[SW] Install event', event);
     globalThis.clients.claim();
-    event.waitUntil(cacheAll());
+    event.waitUntil(cacheAll().then(() => globalThis.skipWaiting()));
 });
 
 globalThis.addEventListener('activate', event => {
     console.debug('[SW] activate event', event);
-    event.waitUntil(Promise.all([enableNavigationPreload(), globalThis.clients.claim()]));
+    event.waitUntil(Promise.all([enableNavigationPreload(), globalThis.clients.claim(), verifyCache()]));
 });
 
 globalThis.addEventListener('message', event => {
@@ -71,7 +71,7 @@ async function cacheFirst(request: RequestInfo | URL, preloadResponsePromise: Pr
         // we need to save clone to put one copy in cache
         // and serve second one
         cachePut(request, responseFromNetwork.clone());
-        console.info("[SW] Ressource not cached, fetched from network:", responseFromNetwork)
+        console.info("[SW] Ressource not cached, fetched from network:", responseFromNetwork);
         return responseFromNetwork;
     } catch (error) {
         const fallbackResponse = await caches.match(fallbackUrl);
@@ -82,7 +82,7 @@ async function cacheFirst(request: RequestInfo | URL, preloadResponsePromise: Pr
         // when even the fallback response is not available,
         // there is nothing we can do, but we must always
         // return a Response object
-        console.error("[SW] No fallback in cache, sending plaintext error.")
+        console.error("[SW] No fallback in cache, sending plaintext error.");
         return new Response('Network error happened', {
             status: 408,
             headers: { 'Content-Type': 'text/plain' },
@@ -129,6 +129,33 @@ function cacheAll(): Promise<void> {
             console.error("Error caching assets: ", e);
             reject(`Error caching assets: ${e}`);
         }
+    });
+}
+
+function verifyCache(): Promise<void> {
+    console.info("Checking that the latest asset.json is the same as our...");
+    return new Promise(async (resolve, reject) => {
+        try {
+            const r = await fetch(assetPath);
+            assetList = JSON.parse(await r.text());
+            console.debug("Retrived asset list: ", assetList);
+            const cache = await caches.open(cacheVersion + cacheName);
+            assetList.assets.forEach(async (asset) => {
+                const response = await cache.match(asset);
+                if(!response){
+                    console.warn("Cache has changed, recaching everything...")
+                    await cacheAll();
+                    resolve();
+                }
+            })
+            console.info("Cache was successfully validated.")
+            resolve();
+
+        } catch (error) {
+            console.error("Error verifying cache: ", error);
+            reject(`Error verifying cache: ${error}`);
+        }
+
     });
 }
 

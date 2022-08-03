@@ -21,12 +21,12 @@ class HomepageElement extends LitElement {
   async subToIndexChanges() {
     var state = await getState();
 
-    this.entries = state.currentIndex?.entries ?? [];
+    this.entries = state.currentIndex?.indexes.flatMap(i => i.index.entries) ?? [];
     this.requestUpdate();
 
     state.subEvent.on(e => {
       getState().then(state => {
-        this.entries = state.currentIndex?.entries ?? [];
+        this.entries = state.currentIndex?.indexes.flatMap(i => i.index.entries) ?? [];
         this.requestUpdate();
       });
     });

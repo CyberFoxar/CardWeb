@@ -137,6 +137,14 @@ Better service worker using MDN example as a base: https://developer.mozilla.org
 Layout for multilingual
 Need to redo md gen at compile and md reading at runtime
 
+# 2022-07-17
+Workign a bit on my new indexes.
+Fixed a bug with my view
+Added some semblance of multilingual, not good for now.
+
+IDEA: Have the main-index.json have only "stubs" of other indexes.
+When I instantiate a "real" object from it, give it the ability to fetch the stubs and fill itself. Maybe add it on the getter of an index.
+This will impact the saving / localstorage-ing / loading of indexes.
 
 # todo short term:
 
@@ -155,6 +163,12 @@ Nice to have: A way to clear storage
 Nice to have: Better events
 Nice to have: Refactor fetch/view to use lit directive like `until`.
 
+WEIRD: Sidebar do not have a fixed enough width, makes it jump around on load when long titles are there
+
+WEIRD/Bug: Sometime, the page reloard infinetly because of webpack issues ? Probably only happen in webpack-dev-server mode, but it still is _very_ annoying. I think the issue has to do with multi-compile and I should probably fix my serviceworker plugin thingy to have it work better, heh.
+
+~~[BUG]: When scrolling to location, it seems to scroll in multiple md-view components ? Or at least in multiple md-view things. This is weird and should not be happenning. It could be because my md-view elements still have `EventListeners` tied up in the window. I might need to remove them using `dis/connectedCallback` -> https://lit.dev/docs/components/lifecycle/#disconnectedcallback -- This solved it indeed.~~
+
 ~~Add IndexEntries in indexedDB -- DONE~~ (need to do it better, but works good enough for now)
 ~~Add proper link between index entries and url/id (new component for fetching and stuff ? Might also have the caching mecanism and such) -- on it~~ -- done, sorta
 ~~Add index entries link into homepage (so I can finally remove them from sidebar)~~ done, but ugly
@@ -169,8 +183,7 @@ Add better way to update TOC, maybe using events ? -- DONE ! Sorta. Enough.
 
 ~~BUG: Coming from an empty localstorage/indexedDB does not work.~~ fixed
 ~~BUG: On first load of homepage component, rules are not there, only by switching on/off they appear.~~ done, a bit ugly but works.
-WEIRD: Sidebar do not have a fixed enough width, makes it jump around on load when long titles are there
-~~BUG: On first load of a rule page, content is not properly scrolled to according to anchor.~~ ugly fix, but it works.
+~~BUG: On first load of a rule page, content is not properly scrolled to according to anchor. ugly fix, but it works.~~
 
 # Todo long term:
 See [Reseach](useful-things-research.md).

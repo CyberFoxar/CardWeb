@@ -30,14 +30,9 @@ export class MarkdownViewElement extends LitElement {
     constructor() {
         super();
 
-        // Shadowroot prevents us from using proper anchor links
-        // So we reimplement it from the change in URL
-        // This means grabbing the change, interpreting which title we want, then slugging it to query the right element to scroll to
-        window.addEventListener('hashchange', () => {
-            this.scrollToLocation();
-        }, false);
-
         const that = this;
+
+        this.scrollToLocation = this.scrollToLocation.bind(this);
 
         // Marked extension function
         // Add side effect of filling a TOC when making tokens.
@@ -75,6 +70,19 @@ export class MarkdownViewElement extends LitElement {
         };
 
         marked.use({ tokenizer });
+    }
+
+    connectedCallback(): void {
+        super.connectedCallback();
+        // Shadowroot prevents us from using proper anchor links
+        // So we reimplement it from the change in URL
+        // This means grabbing the change, interpreting which title we want, then slugging it to query the right element to scroll to
+        window.addEventListener('hashchange', this.scrollToLocation , false);
+    }
+
+    disconnectedCallback(): void {
+        super.disconnectedCallback();
+        window.removeEventListener('hashchange', this.scrollToLocation , false);
     }
 
     render() {

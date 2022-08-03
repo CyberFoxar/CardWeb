@@ -38,7 +38,7 @@ export class MarkdownFetchElement extends LitElement {
     private Idb = new IndexedDB;
 
     // TODO: changeme for prod
-    private rulesRoot = "/fr/";
+    private rulesRoot = "/rules/";
 
     constructor() {
         super();
@@ -79,7 +79,7 @@ export class MarkdownFetchElement extends LitElement {
 
     async saveRuleInIDB(ruleId: string) {
         var index = (await getState()).currentIndex;
-        var rule = index?.entries.find(entry => entry.id === ruleId);
+        var rule = index?.indexes.flatMap(i => i.index.entries).find(entry => entry.id === ruleId);
         if(!rule) {
             console.warn(`No rule found for id ${ruleId}`);
             return;
@@ -132,7 +132,7 @@ export class MarkdownFetchElement extends LitElement {
             return;
         }
 
-        const ruleEntry = (state.currentIndex)!.entries.find(entry => entry.id === ruleId);
+        const ruleEntry = (state.currentIndex)!.indexes.flatMap(i => i.index.entries).find(entry => entry.id === ruleId);
         if (!ruleEntry) {
             console.warn(`No rule found for id ${ruleId}`);
             clearTimeout(loader);
@@ -140,6 +140,9 @@ export class MarkdownFetchElement extends LitElement {
             this.currentLoadedRuleText = '';
             return;
         }
+        // The rule exist in at least one index, we should find which one
+        // TODO: Better this
+        const currentRuleIndex = (state.currentIndex).indexes.find(i => i.index.entries.find(r => r.id === ruleId))!;
 
         var ruleFromIdb: Rule | null;
         try {
@@ -158,7 +161,7 @@ export class MarkdownFetchElement extends LitElement {
         */
         if(!ruleFromIdb || !ruleFromIdb.lastupdated || ruleFromIdb.lastupdated < ruleEntry.lastupdated!) {
             console.log("Fetching rule from server");
-            fetch(this.rulesRoot + ruleEntry.location).then(async response => {
+            fetch(this.rulesRoot + currentRuleIndex.location + '/' + ruleEntry.location).then(async response => {
                 var t = await response.text();
                 const rule = loadFront(t);
                 this.currentLoadedRuleText = rule.__content;
